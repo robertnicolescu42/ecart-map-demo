@@ -1,0 +1,53 @@
+<div class="h3 p-2">eCart map example</div>
+<div *ngIf="stoppers">
+  <svg width="400" height="400" style="border: 1px solid black">
+    <!-- Draw lines between stoppers (connections) -->
+    <ng-container *ngFor="let stopper of stoppers">
+      <line
+        *ngIf="stopper.connections.E"
+        [attr.x1]="stopper.x"
+        [attr.y1]="stopper.y"
+        [attr.x2]="getStopperById(stopper.connections.E).x"
+        [attr.y2]="getStopperById(stopper.connections.E).y"
+        stroke="black"
+        stroke-width="2"
+      />
+
+      <line
+        *ngIf="stopper.connections.S"
+        [attr.x1]="stopper.x"
+        [attr.y1]="stopper.y"
+        [attr.x2]="getStopperById(stopper.connections.S).x"
+        [attr.y2]="getStopperById(stopper.connections.S).y"
+        stroke="black"
+        stroke-width="2"
+      />
+    </ng-container>
+
+    <!-- Draw stoppers (circles) -->
+    <circle
+      *ngFor="let stopper of stoppers"
+      [attr.cx]="stopper.x"
+      [attr.cy]="stopper.y"
+      [attr.fill]="stopper.color"
+      r="15"
+      stroke="black"
+      stroke-width="2"
+      (mouseenter)="showDetails(stopper)"
+      (mouseleave)="hideDetails()"
+      (click)="onStopperClick(stopper)"
+    ></circle>
+  </svg>
+
+  <!-- Tooltip or details on hover -->
+  <div
+    *ngIf="hoveredStopper"
+    class="tooltip"
+    [ngStyle]="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
+  >
+    <strong>ID:</strong> {{ hoveredStopper.id }} <br />
+    <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }} <br />
+    <strong>Description:</strong> {{ hoveredStopper.data.description }} <br />
+    <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }} <br />
+  </div>
+</div>
