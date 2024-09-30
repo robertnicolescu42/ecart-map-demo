@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 interface Stopper {
@@ -12,13 +12,13 @@ interface Stopper {
   color: string;
 
   connections: {
-    N: any;
+    N: string | null;
 
-    S: any;
+    S: string | null;
 
-    E: string;
+    E: string | null;
 
-    W: string;
+    W: string | null;
   };
 
   data: {
@@ -37,7 +37,7 @@ interface Stopper {
   templateUrl: './ecart-map.component.html',
   styleUrl: './ecart-map.component.css',
 })
-export class EcartMapComponent {
+export class EcartMapComponent implements OnInit {
   stoppers: Stopper[] = [
     // First row
     {
@@ -123,6 +123,11 @@ export class EcartMapComponent {
   hoveredStopper = null;
   tooltipX = 0;
   tooltipY = 0;
+  svgDimensions = { width: 0, height: 0 };
+
+  ngOnInit(): void {
+    this.updateSvgDimensions();
+  }
 
   getStopperById(id: string) {
     return this.stoppers.find((stopper) => stopper.id === id);
@@ -141,5 +146,16 @@ export class EcartMapComponent {
 
   onStopperClick(stopper) {
     console.log('Stopper clicked:', stopper);
+  }
+
+  updateSvgDimensions() {
+    const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
+    const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
+
+    // The +50 is just padding
+    this.svgDimensions = {
+      width: maxX + 50,
+      height: maxY + 50,
+    };
   }
 }

@@ -1,7 +1,11 @@
 <p class="h3 p-2">eCart map example</p>
 <hr />
 <div class="p-2" *ngIf="stoppers" style="position: relative">
-  <svg width="400" height="400" style="border: 1px solid black">
+  <svg
+    [attr.width]="svgDimensions.width"
+    [attr.height]="svgDimensions.height"
+    style="border: 1px solid black"
+  >
     <!-- Draw lines between stoppers (connections) -->
     <ng-container *ngFor="let stopper of stoppers">
       <line
