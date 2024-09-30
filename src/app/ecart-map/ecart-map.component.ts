@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 interface Stopper {
@@ -38,6 +38,9 @@ interface Stopper {
   styleUrl: './ecart-map.component.css',
 })
 export class EcartMapComponent implements OnInit {
+  @Input()
+  editMode = false;
+
   padding = 50;
   stoppers: Stopper[] = [
     // First row
@@ -125,6 +128,7 @@ export class EcartMapComponent implements OnInit {
   tooltipX = 0;
   tooltipY = 0;
   svgDimensions = { width: 0, height: 0 };
+  selectedStopper = null;
 
   ngOnInit(): void {
     this.updateSvgDimensions();
@@ -147,6 +151,7 @@ export class EcartMapComponent implements OnInit {
 
   onStopperClick(stopper) {
     console.log('Stopper clicked:', stopper);
+    this.selectedStopper = stopper;
   }
 
   updateSvgDimensions() {

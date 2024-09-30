@@ -4,6 +4,15 @@
   <div class="text-center map-container border rounded p-3">
     <p class="h3 p-2 map-title text-black">eCart map example</p>
     <hr />
+    <div>
+      <button
+        class="btn btn-sm"
+        (click)="editMode = !editMode"
+        [ngClass]="editMode ? 'btn-danger' : 'btn-primary'"
+      >
+        Switch to {{ editMode ? "Normal" : "Edit" }} mode
+      </button>
+    </div>
     <div class="p-2 position-relative" *ngIf="stoppers">
       <svg
         [attr.width]="svgDimensions.width"
@@ -47,7 +56,7 @@
           tooltipClass="custom-tooltip"
           (mouseover)="showDetails(stopper)"
           (mouseout)="hideDetails()"
-          (click)="onStopperClick(stopper)"
+          (click)="!editMode ? onStopperClick(stopper) : null"
         ></circle>
       </svg>
 
