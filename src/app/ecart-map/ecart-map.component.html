@@ -10,7 +10,8 @@
         (click)="editMode = !editMode"
         [ngClass]="editMode ? 'btn-danger' : 'btn-primary'"
       >
-        Switch to {{ editMode ? "Normal" : "Edit" }} mode
+        <i class="fa fa-wand-magic-sparkles"></i> Switch to
+        {{ editMode ? "Normal" : "Edit" }} mode
       </button>
     </div>
     <div class="p-2 position-relative" *ngIf="stoppers">
@@ -83,9 +84,6 @@
           <strong>Description:</strong> {{ selectedStopper?.data.description
           }}<br />
         </p>
-        <button class="btn btn-sm btn-primary my-2" (click)="editStopper()">
-          Edit Stopper
-        </button>
         <hr />
 
         <div class="dropdown-divider"></div>
@@ -106,7 +104,8 @@
             class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
             (click)="addRemoveNeighbor('E')"
           >
-            <i class="fas fa-arrow-right"></i> {{ addRemoveNeighborLabel("E") }}
+            {{ addRemoveNeighborLabel("E") }}
+            <i class="fas fa-arrow-right"></i>
           </button>
           <button
             class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
@@ -117,17 +116,26 @@
         </div>
 
         <div class="dropdown-divider"></div>
+        <hr />
+
+        <button
+          class="btn btn-sm btn-primary my-2 w-100"
+          (click)="editStopper()"
+        >
+          <i class="fas fa-edit"></i>
+          Edit Stopper
+        </button>
         <button
           class="btn btn-sm btn-danger w-100 my-2"
           (click)="removeStopper()"
         >
-          Remove Stopper
+          <i class="fas fa-trash px-1"></i>Remove Stopper
         </button>
         <button
           class="btn btn-sm btn-secondary w-100 my-2"
           (click)="closeMenu()"
         >
-          Close
+          <i class="fas fa-close"></i> Close
         </button>
       </div>
     </div>
