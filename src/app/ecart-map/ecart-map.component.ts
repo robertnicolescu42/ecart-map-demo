@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-ecart-map',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TooltipModule],
   templateUrl: './ecart-map.component.html',
   styleUrl: './ecart-map.component.css',
 })
@@ -101,6 +102,7 @@ export class EcartMapComponent {
   }
 
   showDetails(stopper) {
+    console.log('🚀 ~ EcartMapComponent ~ showDetails ~ stopper:', stopper);
     this.hoveredStopper = stopper;
     this.tooltipX = stopper.x + 20; // Offset tooltip position slightly
     this.tooltipY = stopper.y - 20;
@@ -110,8 +112,22 @@ export class EcartMapComponent {
     this.hoveredStopper = null;
   }
 
-  // Handle click on a stopper
   onStopperClick(stopper) {
     console.log('Stopper clicked:', stopper);
+  }
+
+  getTooltipContent(stopper) {
+    if (stopper.id === 'stopper1') {
+      console.log(
+        '🚀 ~ EcartMapComponent ~ getTooltipContent ~ stopper:',
+        stopper
+      );
+    }
+    return `
+      ID: ${stopper.id}<br/>
+      eCart ID: ${stopper.data.eCartId}<br/>
+      Description: ${stopper.data.description}<br/>
+      Arrival Time: ${stopper.data.arrivalTime}
+    `;
   }
 }

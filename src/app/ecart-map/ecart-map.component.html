@@ -1,5 +1,6 @@
-<div class="h3 p-2">eCart map example</div>
-<div *ngIf="stoppers">
+<p class="h3 p-2">eCart map example</p>
+<hr />
+<div class="p-2" *ngIf="stoppers" style="position: relative">
   <svg width="400" height="400" style="border: 1px solid black">
     <!-- Draw lines between stoppers (connections) -->
     <ng-container *ngFor="let stopper of stoppers">
@@ -33,21 +34,11 @@
       r="15"
       stroke="black"
       stroke-width="2"
-      (mouseenter)="showDetails(stopper)"
-      (mouseleave)="hideDetails()"
+      [tooltip]="getTooltipContent(stopper)"
+      [container]="'body'"
+      tooltipPlacement="top"
+      tooltipClass="custom-tooltip"
       (click)="onStopperClick(stopper)"
     ></circle>
   </svg>
-
-  <!-- Tooltip or details on hover -->
-  <div
-    *ngIf="hoveredStopper"
-    class="tooltip"
-    [ngStyle]="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
-  >
-    <strong>ID:</strong> {{ hoveredStopper.id }} <br />
-    <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }} <br />
-    <strong>Description:</strong> {{ hoveredStopper.data.description }} <br />
-    <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }} <br />
-  </div>
 </div>
