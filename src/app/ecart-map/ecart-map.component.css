@@ -4,6 +4,6 @@
   border: 1px solid black;
   padding: 10px;
   border-radius: 5px;
-  z-index: 10; /* Make sure it appears above other elements */
-  pointer-events: none; /* Prevent tooltip from blocking mouse events */
+  z-index: 10;
+  pointer-events: none;
 }

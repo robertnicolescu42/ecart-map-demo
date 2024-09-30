@@ -96,7 +96,6 @@ export class EcartMapComponent {
   tooltipX = 0;
   tooltipY = 0;
 
-  // Find stopper by ID
   getStopperById(id: string) {
     return this.stoppers.find((stopper) => stopper.id === id);
   }
