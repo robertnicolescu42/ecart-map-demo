@@ -1,59 +1,66 @@
-<p class="h3 p-2">eCart map example</p>
-<hr />
-<div class="p-2" *ngIf="stoppers" style="position: relative">
-  <svg
-    [attr.width]="svgDimensions.width"
-    [attr.height]="svgDimensions.height"
-    style="border: 1px solid black"
-  >
-    <!-- Draw lines between stoppers (connections) -->
-    <ng-container *ngFor="let stopper of stoppers">
-      <line
-        *ngIf="stopper.connections.E"
-        [attr.x1]="stopper.x"
-        [attr.y1]="stopper.y"
-        [attr.x2]="getStopperById(stopper.connections.E).x"
-        [attr.y2]="getStopperById(stopper.connections.E).y"
-        stroke="black"
-        stroke-width="2"
-      />
-      <line
-        *ngIf="stopper.connections.S"
-        [attr.x1]="stopper.x"
-        [attr.y1]="stopper.y"
-        [attr.x2]="getStopperById(stopper.connections.S).x"
-        [attr.y2]="getStopperById(stopper.connections.S).y"
-        stroke="black"
-        stroke-width="2"
-      />
-    </ng-container>
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div class="text-center border rounded shadow p-3 bg-light">
+    <p class="h3 p-2 map-title">eCart map example</p>
+    <hr />
+    <div class="p-2 position-relative" *ngIf="stoppers">
+      <svg
+        [attr.width]="svgDimensions.width"
+        [attr.height]="svgDimensions.height"
+        class="border border-dark"
+      >
+        <!-- Draw lines between stoppers (connections) -->
+        <ng-container *ngFor="let stopper of stoppers">
+          <line
+            *ngIf="stopper.connections.E"
+            [attr.x1]="stopper.x"
+            [attr.y1]="stopper.y"
+            [attr.x2]="getStopperById(stopper.connections.E).x"
+            [attr.y2]="getStopperById(stopper.connections.E).y"
+            stroke="black"
+            stroke-width="2"
+          />
+          <line
+            *ngIf="stopper.connections.S"
+            [attr.x1]="stopper.x"
+            [attr.y1]="stopper.y"
+            [attr.x2]="getStopperById(stopper.connections.S).x"
+            [attr.y2]="getStopperById(stopper.connections.S).y"
+            stroke="black"
+            stroke-width="2"
+          />
+        </ng-container>
 
-    <!-- Draw stoppers (circles) -->
-    <circle
-      *ngFor="let stopper of stoppers"
-      [attr.cx]="stopper.x"
-      [attr.cy]="stopper.y"
-      [attr.fill]="stopper.color"
-      r="15"
-      stroke="black"
-      stroke-width="2"
-      [tooltip]="popTemplate"
-      [container]="'body'"
-      tooltipPlacement="top"
-      tooltipClass="custom-tooltip"
-      (mouseover)="showDetails(stopper)"
-      (mouseout)="hideDetails()"
-      (click)="onStopperClick(stopper)"
-    ></circle>
-  </svg>
+        <!-- Draw stoppers (circles) -->
+        <circle
+          *ngFor="let stopper of stoppers"
+          [attr.cx]="stopper.x"
+          [attr.cy]="stopper.y"
+          [attr.fill]="stopper.color"
+          r="15"
+          stroke="black"
+          stroke-width="2"
+          [tooltip]="popTemplate"
+          [container]="'body'"
+          tooltipPlacement="top"
+          tooltipClass="custom-tooltip"
+          (mouseover)="showDetails(stopper)"
+          (mouseout)="hideDetails()"
+          (click)="onStopperClick(stopper)"
+        ></circle>
+      </svg>
 
-  <!-- Tooltip Template -->
-  <ng-template #popTemplate>
-    <div *ngIf="hoveredStopper">
-      <strong>ID:</strong> {{ hoveredStopper.id }}<br />
-      <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
-      <strong>Description:</strong> {{ hoveredStopper.data.description }}<br />
-      <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
+      <!-- Tooltip Template -->
+      <ng-template #popTemplate>
+        <div *ngIf="hoveredStopper">
+          <strong>ID:</strong> {{ hoveredStopper.id }}<br />
+          <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
+          <strong>Description:</strong> {{ hoveredStopper.data.description
+          }}<br />
+          <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
+        </div>
+      </ng-template>
     </div>
-  </ng-template>
+  </div>
 </div>

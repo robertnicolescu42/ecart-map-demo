@@ -38,6 +38,7 @@ interface Stopper {
   styleUrl: './ecart-map.component.css',
 })
 export class EcartMapComponent implements OnInit {
+  padding = 50;
   stoppers: Stopper[] = [
     // First row
     {
