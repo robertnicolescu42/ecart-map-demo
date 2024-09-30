@@ -56,7 +56,7 @@
           tooltipClass="custom-tooltip"
           (mouseover)="showDetails(stopper)"
           (mouseout)="hideDetails()"
-          (click)="!editMode ? onStopperClick(stopper) : null"
+          (click)="onStopperClick(stopper, $event)"
         ></circle>
       </svg>
 
@@ -70,6 +70,65 @@
           <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
         </div>
       </ng-template>
+
+      <!-- Contextual Menu -->
+      <div
+        *ngIf="contextualMenuVisible"
+        class="contextual-menu bg-light p-3 border rounded shadow"
+        style="position: fixed; top: 100px; right: 20px; width: 250px"
+      >
+        <h5>Stopper: {{ selectedStopper?.id }}</h5>
+        <p>
+          <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
+          <strong>Description:</strong> {{ selectedStopper?.data.description
+          }}<br />
+        </p>
+        <button
+          class="btn btn-sm btn-primary w-100 my-2"
+          (click)="editStopper()"
+        >
+          Edit Stopper
+        </button>
+        <div class="dropdown-divider"></div>
+        <h6>Add/Remove Neighbors:</h6>
+        <button
+          class="btn btn-sm btn-secondary w-100 my-1"
+          (click)="addRemoveNeighbor('N')"
+        >
+          {{ addRemoveNeighborLabel("N") }}
+        </button>
+        <button
+          class="btn btn-sm btn-secondary w-100 my-1"
+          (click)="addRemoveNeighbor('S')"
+        >
+          {{ addRemoveNeighborLabel("S") }}
+        </button>
+        <button
+          class="btn btn-sm btn-secondary w-100 my-1"
+          (click)="addRemoveNeighbor('E')"
+        >
+          {{ addRemoveNeighborLabel("E") }}
+        </button>
+        <button
+          class="btn btn-sm btn-secondary w-100 my-1"
+          (click)="addRemoveNeighbor('W')"
+        >
+          {{ addRemoveNeighborLabel("W") }}
+        </button>
+        <div class="dropdown-divider"></div>
+        <button
+          class="btn btn-sm btn-danger w-100 my-2"
+          (click)="removeStopper()"
+        >
+          Remove Stopper
+        </button>
+        <button
+          class="btn btn-sm btn-secondary w-100 my-2"
+          (click)="closeMenu()"
+        >
+          Close
+        </button>
+      </div>
     </div>
   </div>
 </div>

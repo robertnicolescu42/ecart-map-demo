@@ -4,7 +4,6 @@
   position: relative;
   border-radius: 15px;
   box-shadow: 12px 12px 2px 1px rgba(255, 255, 255, 0.2);
-
 }
 
 .svg-map {
@@ -14,4 +13,10 @@
 
 .map-title {
   cursor: default;
+}
+
+.contextual-menu {
+  position: absolute;
+  width: 200px;
+  z-index: 1000;
 }

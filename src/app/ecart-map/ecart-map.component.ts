@@ -130,6 +130,9 @@ export class EcartMapComponent implements OnInit {
   svgDimensions = { width: 0, height: 0 };
   selectedStopper = null;
 
+  contextualMenuVisible = false;
+  menuPosition = { x: 0, y: 0 };
+
   ngOnInit(): void {
     this.updateSvgDimensions();
   }
@@ -149,9 +152,71 @@ export class EcartMapComponent implements OnInit {
     this.hoveredStopper = null;
   }
 
-  onStopperClick(stopper) {
-    console.log('Stopper clicked:', stopper);
+  onStopperClick(stopper, event) {
     this.selectedStopper = stopper;
+    this.contextualMenuVisible = true;
+    this.menuPosition = { x: event.clientX, y: event.clientY };
+  }
+
+  closeMenu() {
+    this.contextualMenuVisible = false;
+    this.selectedStopper = null;
+  }
+  addRemoveNeighborLabel(direction: string): string {
+    const neighborId = this.selectedStopper.connections[direction];
+    return neighborId
+      ? `Remove ${direction} Neighbor`
+      : `Add ${direction} Neighbor`;
+  }
+
+  addRemoveNeighbor(direction: string) {
+    const oppositeDirection = {
+      N: 'S',
+      S: 'N',
+      E: 'W',
+      W: 'E',
+    };
+
+    const currentNeighborId = this.selectedStopper.connections[direction];
+    if (currentNeighborId) {
+      // Remove neighbor
+      const neighborStopper = this.getStopperById(currentNeighborId);
+      neighborStopper.connections[oppositeDirection[direction]] = null;
+      this.selectedStopper.connections[direction] = null;
+    } else {
+      // Add neighbor
+      const newNeighborId = prompt('Enter the ID of the new neighbor');
+      const newNeighborStopper = this.getStopperById(newNeighborId);
+      if (newNeighborStopper) {
+        this.selectedStopper.connections[direction] = newNeighborId;
+        newNeighborStopper.connections[oppositeDirection[direction]] =
+          this.selectedStopper.id;
+      }
+    }
+    this.closeMenu();
+  }
+
+  removeStopper() {
+    const stopperId = this.selectedStopper.id;
+
+    // Remove references to this stopper from neighbors
+    Object.keys(this.selectedStopper.connections).forEach((dir) => {
+      const neighborId = this.selectedStopper.connections[dir];
+      if (neighborId) {
+        const neighborStopper = this.getStopperById(neighborId);
+        const oppositeDirection = { N: 'S', S: 'N', E: 'W', W: 'E' };
+        neighborStopper.connections[oppositeDirection[dir]] = null;
+      }
+    });
+
+    // Remove the stopper from the array
+    this.stoppers = this.stoppers.filter((stopper) => stopper.id !== stopperId);
+    this.closeMenu();
+  }
+
+  editStopper() {
+    // placeholder
+    this.closeMenu();
   }
 
   updateSvgDimensions() {
