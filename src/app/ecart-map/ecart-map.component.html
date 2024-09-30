@@ -1,14 +1,14 @@
 <div
   class="container d-flex justify-content-center align-items-center min-vh-100"
 >
-  <div class="text-center border rounded shadow p-3 bg-light">
-    <p class="h3 p-2 map-title">eCart map example</p>
+  <div class="text-center map-container border rounded p-3">
+    <p class="h3 p-2 map-title text-black">eCart map example</p>
     <hr />
     <div class="p-2 position-relative" *ngIf="stoppers">
       <svg
         [attr.width]="svgDimensions.width"
         [attr.height]="svgDimensions.height"
-        class="border border-dark"
+        class="svg-map"
       >
         <!-- Draw lines between stoppers (connections) -->
         <ng-container *ngFor="let stopper of stoppers">
@@ -53,7 +53,7 @@
 
       <!-- Tooltip Template -->
       <ng-template #popTemplate>
-        <div *ngIf="hoveredStopper">
+        <div *ngIf="hoveredStopper" class="text-start">
           <strong>ID:</strong> {{ hoveredStopper.id }}<br />
           <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
           <strong>Description:</strong> {{ hoveredStopper.data.description
