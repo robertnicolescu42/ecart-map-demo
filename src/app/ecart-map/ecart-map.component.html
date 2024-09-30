@@ -13,7 +13,6 @@
         stroke="black"
         stroke-width="2"
       />
-
       <line
         *ngIf="stopper.connections.S"
         [attr.x1]="stopper.x"
@@ -34,11 +33,23 @@
       r="15"
       stroke="black"
       stroke-width="2"
-      [tooltip]="getTooltipContent(stopper)"
+      [tooltip]="popTemplate"
       [container]="'body'"
       tooltipPlacement="top"
       tooltipClass="custom-tooltip"
+      (mouseover)="showDetails(stopper)"
+      (mouseout)="hideDetails()"
       (click)="onStopperClick(stopper)"
     ></circle>
   </svg>
+
+  <!-- Tooltip Template -->
+  <ng-template #popTemplate>
+    <div *ngIf="hoveredStopper">
+      <strong>ID:</strong> {{ hoveredStopper.id }}<br />
+      <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
+      <strong>Description:</strong> {{ hoveredStopper.data.description }}<br />
+      <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
+    </div>
+  </ng-template>
 </div>
