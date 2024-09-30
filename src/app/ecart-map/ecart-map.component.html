@@ -83,38 +83,39 @@
           <strong>Description:</strong> {{ selectedStopper?.data.description
           }}<br />
         </p>
-        <button
-          class="btn btn-sm btn-primary w-100 my-2"
-          (click)="editStopper()"
-        >
+        <button class="btn btn-sm btn-primary my-2" (click)="editStopper()">
           Edit Stopper
         </button>
+        <hr />
+
         <div class="dropdown-divider"></div>
-        <h6>Add/Remove Neighbors:</h6>
-        <button
-          class="btn btn-sm btn-secondary w-100 my-1"
-          (click)="addRemoveNeighbor('N')"
-        >
-          {{ addRemoveNeighborLabel("N") }}
-        </button>
-        <button
-          class="btn btn-sm btn-secondary w-100 my-1"
-          (click)="addRemoveNeighbor('S')"
-        >
-          {{ addRemoveNeighborLabel("S") }}
-        </button>
-        <button
-          class="btn btn-sm btn-secondary w-100 my-1"
-          (click)="addRemoveNeighbor('E')"
-        >
-          {{ addRemoveNeighborLabel("E") }}
-        </button>
-        <button
-          class="btn btn-sm btn-secondary w-100 my-1"
-          (click)="addRemoveNeighbor('W')"
-        >
-          {{ addRemoveNeighborLabel("W") }}
-        </button>
+        <div class="position-relative text-center neighbor-buttons">
+          <button
+            class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
+            (click)="addRemoveNeighbor('N')"
+          >
+            <i class="fas fa-arrow-up"></i> {{ addRemoveNeighborLabel("N") }}
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
+            (click)="addRemoveNeighbor('W')"
+          >
+            <i class="fas fa-arrow-left"></i> {{ addRemoveNeighborLabel("W") }}
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
+            (click)="addRemoveNeighbor('E')"
+          >
+            <i class="fas fa-arrow-right"></i> {{ addRemoveNeighborLabel("E") }}
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
+            (click)="addRemoveNeighbor('S')"
+          >
+            <i class="fas fa-arrow-down"></i> {{ addRemoveNeighborLabel("S") }}
+          </button>
+        </div>
+
         <div class="dropdown-divider"></div>
         <button
           class="btn btn-sm btn-danger w-100 my-2"

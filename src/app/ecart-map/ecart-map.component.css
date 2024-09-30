@@ -16,7 +16,20 @@
 }
 
 .contextual-menu {
-  position: absolute;
-  width: 200px;
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 250px;
   z-index: 1000;
+}
+
+.neighbor-buttons {
+  height: 150px;
+  width: 220px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.neighbor-buttons button {
+  width: 105px;
 }

@@ -164,9 +164,7 @@ export class EcartMapComponent implements OnInit {
   }
   addRemoveNeighborLabel(direction: string): string {
     const neighborId = this.selectedStopper.connections[direction];
-    return neighborId
-      ? `Remove ${direction} Neighbor`
-      : `Add ${direction} Neighbor`;
+    return neighborId ? `Remove ${direction} ` : `Add ${direction} `;
   }
 
   addRemoveNeighbor(direction: string) {
