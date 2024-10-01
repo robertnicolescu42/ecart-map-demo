@@ -251,13 +251,22 @@ export class EcartMapComponent implements OnInit {
     };
 
     const currentNeighborId = this.selectedStopper.connections[direction];
+    const stopperInDirection = this.getStopperByPosition(
+      this.selectedStopper,
+      direction
+    );
+
     if (currentNeighborId) {
-      // Remove neighbor
+      // If there's already a connection, remove it
       const neighborStopper = this.getStopperById(currentNeighborId);
       neighborStopper.connections[oppositeDirection[direction]] = null;
       this.selectedStopper.connections[direction] = null;
+    } else if (stopperInDirection) {
+      // Link to the existing stopper in the direction
+      this.selectedStopper.connections[direction] = stopperInDirection.id;
+      stopperInDirection.connections[oppositeDirection[direction]] =
+        this.selectedStopper.id;
     } else {
-      // Add neighbor
       const newNeighborId = prompt('Enter the ID of the new neighbor');
       const newNeighborStopper = this.getStopperById(newNeighborId);
       if (newNeighborStopper) {
@@ -266,7 +275,6 @@ export class EcartMapComponent implements OnInit {
           this.selectedStopper.id;
       }
     }
-    this.closeMenu();
   }
 
   removeStopper() {
