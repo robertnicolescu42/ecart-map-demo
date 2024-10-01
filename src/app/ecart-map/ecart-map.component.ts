@@ -91,8 +91,21 @@ export class EcartMapComponent implements OnInit {
       x: 250,
       y: 150,
       color: 'blue',
-      connections: { N: null, S: null, E: null, W: 'stopper5' },
+      connections: { N: null, S: null, E: 'stopper6.1', W: 'stopper5' },
       data: { eCartId: 'e128', description: 'Stopper 6', arrivalTime: '12:25' },
+    },
+
+    {
+      id: 'stopper6.1',
+      x: 350,
+      y: 150,
+      color: 'blue',
+      connections: { N: null, S: null, E: null, W: 'stopper6' },
+      data: {
+        eCartId: 'e128',
+        description: 'Stopper 6.1',
+        arrivalTime: '12:25',
+      },
     },
 
     // Third row
@@ -112,26 +125,28 @@ export class EcartMapComponent implements OnInit {
       connections: { N: null, S: null, E: null, W: 'stopper7' },
       data: { eCartId: 'e130', description: 'Stopper 8', arrivalTime: '12:35' },
     },
-
-    // Fourth row isolated
-    {
-      id: 'stopper9',
-      x: 250,
-      y: 350,
-      color: 'blue',
-      connections: { N: null, S: null, E: null, W: null }, // No connections, isolated stopper
-      data: { eCartId: 'e131', description: 'Stopper 9', arrivalTime: '12:40' },
-    },
   ];
 
   hoveredStopper = null;
-  tooltipX = 0;
-  tooltipY = 0;
   svgDimensions = { width: 0, height: 0 };
   selectedStopper = null;
 
   contextualMenuVisible = false;
   menuPosition = { x: 0, y: 0 };
+  possibleStoppers = [
+    'stopper1',
+    'stopper2',
+    'stopper3',
+    'stopper4',
+    'stopper5',
+    'stopper6',
+    'stopper7',
+    'stopper8',
+    'stopper9',
+    'stopper10',
+    'stopper11',
+    'stopper12',
+  ];
 
   ngOnInit(): void {
     this.updateSvgDimensions();
@@ -144,8 +159,6 @@ export class EcartMapComponent implements OnInit {
   showDetails(stopper) {
     console.log('🚀 ~ EcartMapComponent ~ showDetails ~ stopper:', stopper);
     this.hoveredStopper = stopper;
-    this.tooltipX = stopper.x + 20;
-    this.tooltipY = stopper.y - 20;
   }
 
   hideDetails() {
