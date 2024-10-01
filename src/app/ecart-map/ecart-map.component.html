@@ -52,6 +52,10 @@
           stroke="black"
           stroke-width="2"
           [tooltip]="popTemplate"
+          [ngClass]="{
+            'ecart-available': stopper.data.isEcartAvailable,
+            'ecart-unavailable': !stopper.data.isEcartAvailable
+          }"
           [container]="'body'"
           tooltipPlacement="top"
           tooltipClass="custom-tooltip"
