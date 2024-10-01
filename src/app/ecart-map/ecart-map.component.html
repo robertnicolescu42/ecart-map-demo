@@ -52,10 +52,6 @@
           stroke="black"
           stroke-width="2"
           [tooltip]="popTemplate"
-          [ngClass]="{
-            'ecart-available': stopper.data.isEcartAvailable,
-            'ecart-unavailable': !stopper.data.isEcartAvailable
-          }"
           [container]="'body'"
           tooltipPlacement="top"
           tooltipClass="custom-tooltip"
@@ -63,6 +59,10 @@
           (mouseout)="hideDetails()"
           (click)="onStopperClick(stopper, $event)"
         ></circle>
+        <!-- [ngClass]="{
+            'ecart-available': stopper.data.isEcartAvailable,
+            'ecart-unavailable': !stopper.data.isEcartAvailable
+          }" -->
       </svg>
 
       <!-- Tooltip Template -->
@@ -93,30 +93,54 @@
           <div class="position-relative text-center neighbor-buttons">
             <button
               class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
-              (click)="addRemoveNeighbor('N')"
+              (click)="prepareAddStopper('N')"
             >
               <i class="fas fa-arrow-up"></i> {{ addRemoveNeighborLabel("N") }}
             </button>
             <button
               class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
-              (click)="addRemoveNeighbor('W')"
+              (click)="prepareAddStopper('W')"
             >
               <i class="fas fa-arrow-left"></i>
               {{ addRemoveNeighborLabel("W") }}
             </button>
             <button
               class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
-              (click)="addRemoveNeighbor('E')"
+              (click)="prepareAddStopper('E')"
             >
               {{ addRemoveNeighborLabel("E") }}
               <i class="fas fa-arrow-right"></i>
             </button>
             <button
               class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
-              (click)="addRemoveNeighbor('S')"
+              (click)="prepareAddStopper('S')"
             >
               <i class="fas fa-arrow-down"></i>
               {{ addRemoveNeighborLabel("S") }}
+            </button>
+          </div>
+
+          <!-- Dropdown to add stopper -->
+          <div *ngIf="showStopperDropdown">
+            <label for="stopperSelect">Select a Stopper:</label>
+            <select
+              id="stopperSelect"
+              class="form-select"
+              [(ngModel)]="selectedStopperToAdd"
+            >
+              <option
+                *ngFor="let stopper of possibleStoppers"
+                [ngValue]="stopper"
+              >
+                {{ stopper.id }}
+                {{ -stopper.data.description || "" }}
+              </option>
+            </select>
+            <button
+              class="btn btn-primary mt-2 w-100"
+              (click)="addStopper(selectedDirection)"
+            >
+              Add Stopper
             </button>
           </div>
 
@@ -127,14 +151,13 @@
             class="btn btn-sm btn-primary my-2 w-100"
             (click)="editStopper()"
           >
-            <i class="fas fa-edit"></i>
-            Edit Stopper
+            <i class="fas fa-edit"></i> Edit Stopper
           </button>
           <button
             class="btn btn-sm btn-danger w-100 my-2"
             (click)="removeStopper()"
           >
-            <i class="fas fa-trash px-1"></i>Remove Stopper
+            <i class="fas fa-trash px-1"></i> Remove Stopper
           </button>
           <button
             class="btn btn-sm btn-secondary w-100 my-2"
@@ -144,12 +167,23 @@
           </button>
         </div>
       </div>
+
+      <!-- When no stopper is selected and stoppers array is empty -->
+      <ng-template #noStopperSelected>
+        <div *ngIf="stoppers.length === 0" class="alert alert-info">
+          No stoppers available. Click the button below to add the first
+          stopper.
+          <button
+            class="btn btn-primary mt-2"
+            (click)="prepareAddFirstStopper()"
+          >
+            Add First Stopper
+          </button>
+        </div>
+        <div *ngIf="stoppers.length > 0" class="alert alert-warning">
+          Please click on a stopper to view or edit details.
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
-
-<ng-template #noStopperSelected>
-  <div class="alert alert-warning" role="alert">
-    Please click on a stopper to view or edit details.
-  </div>
-</ng-template>
