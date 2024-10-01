@@ -40,7 +40,7 @@ export class EcartMapComponent implements OnInit {
       x: 50,
       y: 50,
       color: 'blue',
-      connections: { N: null, S: 'stopper4', E: 'stopper2', W: null },
+      connections: { N: null, S: null, E: 'stopper2', W: null },
       data: {
         eCartId: 'e123',
         description: 'Stopper 1',
@@ -206,9 +206,40 @@ export class EcartMapComponent implements OnInit {
     this.contextualMenuVisible = false;
     this.selectedStopper = null;
   }
+
   addRemoveNeighborLabel(direction: string): string {
-    const neighborId = this.selectedStopper.connections[direction];
-    return neighborId ? `Remove ${direction} ` : `Add ${direction} `;
+    const currentNeighborId = this.selectedStopper.connections[direction];
+    const stopperInDirection = this.getStopperByPosition(
+      this.selectedStopper,
+      direction
+    );
+
+    if (currentNeighborId) {
+      return `Remove ${direction}`;
+    } else if (stopperInDirection) {
+      return `Link to ${direction}`;
+    } else {
+      return `Add ${direction}`;
+    }
+  }
+
+  getStopperByPosition(
+    stopper: Stopper,
+    direction: string
+  ): Stopper | undefined {
+    const offset = 100; // Set offset between neighboring stoppers
+
+    let deltaX = 0;
+    let deltaY = 0;
+
+    if (direction === 'N') deltaY = -offset;
+    if (direction === 'S') deltaY = offset;
+    if (direction === 'E') deltaX = offset;
+    if (direction === 'W') deltaX = -offset;
+
+    return this.stoppers.find(
+      (s) => s.x === stopper.x + deltaX && s.y === stopper.y + deltaY
+    );
   }
 
   addRemoveNeighbor(direction: string) {
