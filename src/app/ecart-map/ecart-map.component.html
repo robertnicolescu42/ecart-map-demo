@@ -74,70 +74,78 @@
 
       <!-- Contextual Menu -->
       <div
-        *ngIf="contextualMenuVisible"
-        class="contextual-menu bg-light p-3 border rounded shadow"
-        style="position: fixed; top: 100px; right: 20px; width: 250px"
+        class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
-        <h5>Stopper: {{ selectedStopper?.id }}</h5>
-        <p>
-          <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
-          <strong>Description:</strong> {{ selectedStopper?.data.description
-          }}<br />
-        </p>
-        <hr />
+        <div *ngIf="contextualMenuVisible; else noStopperSelected">
+          <h5>Stopper: {{ selectedStopper?.id }}</h5>
+          <p>
+            <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
+            <strong>Description:</strong> {{ selectedStopper?.data.description
+            }}<br />
+          </p>
+          <hr />
 
-        <div class="dropdown-divider"></div>
-        <div class="position-relative text-center neighbor-buttons">
+          <div class="dropdown-divider"></div>
+          <div class="position-relative text-center neighbor-buttons">
+            <button
+              class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
+              (click)="addRemoveNeighbor('N')"
+            >
+              <i class="fas fa-arrow-up"></i> {{ addRemoveNeighborLabel("N") }}
+            </button>
+            <button
+              class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
+              (click)="addRemoveNeighbor('W')"
+            >
+              <i class="fas fa-arrow-left"></i>
+              {{ addRemoveNeighborLabel("W") }}
+            </button>
+            <button
+              class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
+              (click)="addRemoveNeighbor('E')"
+            >
+              {{ addRemoveNeighborLabel("E") }}
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button
+              class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
+              (click)="addRemoveNeighbor('S')"
+            >
+              <i class="fas fa-arrow-down"></i>
+              {{ addRemoveNeighborLabel("S") }}
+            </button>
+          </div>
+
+          <div class="dropdown-divider"></div>
+          <hr />
+
           <button
-            class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
-            (click)="addRemoveNeighbor('N')"
+            class="btn btn-sm btn-primary my-2 w-100"
+            (click)="editStopper()"
           >
-            <i class="fas fa-arrow-up"></i> {{ addRemoveNeighborLabel("N") }}
+            <i class="fas fa-edit"></i>
+            Edit Stopper
           </button>
           <button
-            class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
-            (click)="addRemoveNeighbor('W')"
+            class="btn btn-sm btn-danger w-100 my-2"
+            (click)="removeStopper()"
           >
-            <i class="fas fa-arrow-left"></i> {{ addRemoveNeighborLabel("W") }}
+            <i class="fas fa-trash px-1"></i>Remove Stopper
           </button>
           <button
-            class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
-            (click)="addRemoveNeighbor('E')"
+            class="btn btn-sm btn-secondary w-100 my-2"
+            (click)="closeMenu()"
           >
-            {{ addRemoveNeighborLabel("E") }}
-            <i class="fas fa-arrow-right"></i>
-          </button>
-          <button
-            class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
-            (click)="addRemoveNeighbor('S')"
-          >
-            <i class="fas fa-arrow-down"></i> {{ addRemoveNeighborLabel("S") }}
+            <i class="fas fa-close"></i> Close
           </button>
         </div>
-
-        <div class="dropdown-divider"></div>
-        <hr />
-
-        <button
-          class="btn btn-sm btn-primary my-2 w-100"
-          (click)="editStopper()"
-        >
-          <i class="fas fa-edit"></i>
-          Edit Stopper
-        </button>
-        <button
-          class="btn btn-sm btn-danger w-100 my-2"
-          (click)="removeStopper()"
-        >
-          <i class="fas fa-trash px-1"></i>Remove Stopper
-        </button>
-        <button
-          class="btn btn-sm btn-secondary w-100 my-2"
-          (click)="closeMenu()"
-        >
-          <i class="fas fa-close"></i> Close
-        </button>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #noStopperSelected>
+  <div class="alert alert-warning" role="alert">
+    Please click on a stopper to view or edit details.
+  </div>
+</ng-template>

@@ -33,3 +33,10 @@
 .neighbor-buttons button {
   width: 105px;
 }
+
+.contextual-menu {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 250px;
+}
