@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng deploy --repo=https://github.com/robertnicolescu42/ecart-map-demo.git --name='robertnicolescu42'"
   },
   "private": true,
   "dependencies": {
