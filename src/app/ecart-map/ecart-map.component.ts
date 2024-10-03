@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FormsModule } from '@angular/forms';
 
@@ -180,6 +180,8 @@ export class EcartMapComponent implements OnInit {
     'stopper12',
   ];
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngOnInit(): void {
     this.updateSvgDimensions();
   }
@@ -323,8 +325,10 @@ export class EcartMapComponent implements OnInit {
           this.selectedStopper.id;
         this.selectedStopper.connections[direction] = newNeighborId;
         this.stoppers.push(newStopper);
+        this.selectedStopper = newStopper;
       }
       this.updateSvgDimensions();
+      this.cdr.markForCheck();
     }
   }
 
@@ -343,6 +347,8 @@ export class EcartMapComponent implements OnInit {
 
     // Remove the stopper from the array
     this.stoppers = this.stoppers.filter((stopper) => stopper.id !== stopperId);
+    this.updateSvgDimensions();
+    this.cdr.markForCheck();
     this.closeMenu();
   }
 
@@ -352,13 +358,22 @@ export class EcartMapComponent implements OnInit {
   }
 
   updateSvgDimensions() {
+    const minX = Math.min(...this.stoppers.map((stopper) => stopper.x));
+    const minY = Math.min(...this.stoppers.map((stopper) => stopper.y));
     const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
     const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
 
-    // The +50 is just padding
+    // Adjust the coordinates of stoppers based on minimum values, since having negative values will case the SVG to not render
+    this.stoppers.forEach((stopper) => {
+      stopper.x = stopper.x - minX + this.padding;
+      stopper.y = stopper.y - minY + this.padding;
+    });
+
     this.svgDimensions = {
-      width: maxX + 50,
-      height: maxY + 50,
+      width: maxX - minX + 2 * this.padding,
+      height: maxY - minY + 2 * this.padding,
     };
+
+    this.cdr.detectChanges();
   }
 }
