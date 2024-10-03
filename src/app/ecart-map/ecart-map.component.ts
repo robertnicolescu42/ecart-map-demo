@@ -48,6 +48,7 @@ export class EcartMapComponent implements OnInit {
   };
   padding = 50;
   originalStoppers = [];
+  // stoppers: Stopper[] = [];
   stoppers: Stopper[] = [
     // First row
     {
@@ -185,6 +186,24 @@ export class EcartMapComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    if (this.stoppers.length === 0) {
+      this.contextualMenuVisible = true;
+      this.showNewStopperDialog = true;
+      this.enterEditMode();
+      this.selectedStopper = {
+        id: '',
+        x: 50,
+        y: 50,
+        color: 'blue',
+        connections: { N: null, S: null, E: null, W: null },
+        data: {
+          eCartId: '',
+          description: '',
+          arrivalTime: '12:00',
+          isEcartAvailable: false,
+        },
+      };
+    }
     this.updateSvgDimensions();
   }
 
@@ -357,6 +376,7 @@ export class EcartMapComponent implements OnInit {
       this.stoppers.push(newStopper);
       this.selectedStopper = newStopper;
     }
+    this.hasChanges = true;
     this.updateSvgDimensions();
     this.cancelAddingOfNewStopper();
     this.cdr.markForCheck();
@@ -402,11 +422,12 @@ export class EcartMapComponent implements OnInit {
       stopper.y = stopper.y - minY + this.padding;
     });
 
+    let calculatedWidth = maxX - minX + 2 * this.padding;
+    let calculatedHeight = maxY - minY + 2 * this.padding;
     this.svgDimensions = {
-      width: maxX - minX + 2 * this.padding,
-      height: maxY - minY + 2 * this.padding,
+      width: calculatedWidth > 0 ? calculatedWidth : 300,
+      height: calculatedHeight > 0 ? calculatedHeight : 100,
     };
-
     this.cdr.detectChanges();
   }
 

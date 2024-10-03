@@ -16,7 +16,11 @@
 
       <!-- Save / Cancel buttons when in edit mode -->
       <div *ngIf="isEditMode">
-        <button class="btn btn-danger me-2" (click)="cancelEdit()">
+        <button
+          *ngIf="this.originalStoppers.length > 0"
+          class="btn btn-danger me-2"
+          (click)="cancelEdit()"
+        >
           <i class="fas fa-times"></i> Cancel
         </button>
         <button
@@ -116,13 +120,17 @@
         class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
         <div *ngIf="contextualMenuVisible; else noStopperSelected">
-          <h5>Stopper: {{ selectedStopper?.id }}</h5>
-          <p>
-            <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
-            <strong>Description:</strong> {{ selectedStopper?.data.description
-            }}<br />
-          </p>
-          <hr />
+          <div *ngIf="this.selectedStopper.id !== ''">
+            <h5>Stopper: {{ selectedStopper?.id }}</h5>
+            <p>
+              <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId
+              }}<br />
+              <strong>Description:</strong>
+              {{ selectedStopper?.data.description }}<br />
+            </p>
+
+            <hr />
+          </div>
           <div *ngIf="!showNewStopperDialog; else newStopperInputs">
             <div class="dropdown-divider"></div>
             <div class="position-relative text-center neighbor-buttons">
@@ -167,6 +175,7 @@
               Edit Stopper
             </button>
             <button
+              *ngIf="this.stoppers.length > 1"
               class="btn btn-sm btn-danger w-100 my-2"
               (click)="removeStopper()"
             >
@@ -217,7 +226,11 @@
     />
   </div>
   <div class="py-2">
-    <button class="btn btn-secondary me-2" (click)="cancelAddingOfNewStopper()">
+    <button
+      *ngIf="this.stoppers.length > 0"
+      class="btn btn-secondary me-2"
+      (click)="cancelAddingOfNewStopper()"
+    >
       <i class="fas fa-times"></i> Cancel
     </button>
     <button
