@@ -31,9 +31,10 @@ interface Stopper {
 })
 export class EcartMapComponent implements OnInit {
   @Input()
-  editMode = false;
+  isEditMode = false;
 
   padding = 50;
+  originalStoppers = [];
   stoppers: Stopper[] = [
     // First row
     {
@@ -375,5 +376,26 @@ export class EcartMapComponent implements OnInit {
     };
 
     this.cdr.detectChanges();
+  }
+
+  enterEditMode() {
+    this.isEditMode = true;
+    this.originalStoppers = JSON.parse(JSON.stringify(this.stoppers)); // Deep copy of stoppers
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
+  }
+
+  // Save edit mode changes
+  saveEdit() {
+    this.isEditMode = false;
+    this.applyChanges();
+  }
+
+  applyChanges() {
+    // save the file to s3
+    console.log('Changes saved.');
   }
 }

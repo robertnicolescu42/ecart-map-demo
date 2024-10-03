@@ -4,15 +4,25 @@
   <div class="text-center map-container border rounded p-3">
     <p class="h3 p-2 map-title text-black">eCart map example</p>
     <hr />
-    <div>
+    <div class="toolbar mb-3">
+      <!-- Edit mode button -->
       <button
-        class="btn btn-sm"
-        (click)="editMode = !editMode"
-        [ngClass]="editMode ? 'btn-danger' : 'btn-primary'"
+        *ngIf="!isEditMode"
+        class="btn btn-primary"
+        (click)="enterEditMode()"
       >
-        <i class="fa fa-wand-magic-sparkles"></i> Switch to
-        {{ editMode ? "Normal" : "Edit" }} mode
+        <i class="fas fa-edit"></i> Switch to Edit Mode
       </button>
+
+      <!-- Save / Cancel buttons when in edit mode -->
+      <div *ngIf="isEditMode">
+        <button class="btn btn-danger me-2" (click)="cancelEdit()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button class="btn btn-success" (click)="saveEdit()">
+          <i class="fas fa-check"></i> Save
+        </button>
+      </div>
     </div>
     <div class="p-2 position-relative" *ngIf="stoppers">
       <svg
@@ -20,8 +30,8 @@
         [attr.height]="svgDimensions.height"
         class="svg-map"
       >
-        <!-- grid pattern -->
-        <defs>
+        <!-- Grid pattern -->
+        <defs *ngIf="isEditMode">
           <pattern
             id="grid"
             width="50"
@@ -73,15 +83,15 @@
           stroke-width="2"
           [tooltip]="popTemplate"
           [ngClass]="{
-            'ecart-available': stopper.data.isEcartAvailable,
-            'ecart-unavailable': !stopper.data.isEcartAvailable
+            'ecart-available': stopper.data.isEcartAvailable || isEditMode,
+            'ecart-unavailable': !isEditMode && !stopper.data.isEcartAvailable
           }"
           [container]="'body'"
           tooltipPlacement="top"
           tooltipClass="custom-tooltip"
           (mouseover)="showDetails(stopper)"
           (mouseout)="hideDetails()"
-          (click)="onStopperClick(stopper, $event)"
+          (click)="isEditMode && onStopperClick(stopper, $event)"
         ></circle>
       </svg>
 
@@ -100,7 +110,9 @@
       <div
         class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
-        <div *ngIf="contextualMenuVisible; else noStopperSelected">
+        <div
+          *ngIf="isEditMode && contextualMenuVisible; else noStopperSelected"
+        >
           <h5>Stopper: {{ selectedStopper?.id }}</h5>
           <p>
             <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
