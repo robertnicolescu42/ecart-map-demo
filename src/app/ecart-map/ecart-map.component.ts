@@ -22,6 +22,13 @@ interface Stopper {
   };
 }
 
+interface PartialStopper {
+  id: string;
+  data: {
+    description?: string;
+  };
+}
+
 @Component({
   selector: 'app-ecart-map',
   standalone: true,
@@ -32,7 +39,13 @@ interface Stopper {
 export class EcartMapComponent implements OnInit {
   @Input()
   isEditMode = false;
-
+  showNewStopperDialog = false;
+  newStopper: PartialStopper = {
+    id: '',
+    data: {
+      description: '',
+    },
+  };
   padding = 50;
   originalStoppers = [];
   stoppers: Stopper[] = [
@@ -160,6 +173,7 @@ export class EcartMapComponent implements OnInit {
       },
     },
   ];
+  directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
   selectedStopper = null;
@@ -273,52 +287,80 @@ export class EcartMapComponent implements OnInit {
       stopperInDirection.connections[oppositeDirection[direction]] =
         this.selectedStopper.id;
     } else {
-      const newNeighborId = prompt('Enter the ID of the new neighbor');
-      const newNeighborStopper = this.getStopperById(newNeighborId);
-      if (newNeighborStopper) {
-        this.selectedStopper.connections[direction] = newNeighborId;
-        newNeighborStopper.connections[oppositeDirection[direction]] =
-          this.selectedStopper.id;
-      } else {
-        // Create a new stopper in that direction and redraw the map
-        const newStopper = {
-          id: newNeighborId,
-          x: 0,
-          y: 0,
-          color: 'blue',
-          connections: { N: null, S: null, E: null, W: null },
-          data: {
-            eCartId: newNeighborId,
-            description: 'New Stopper',
-            arrivalTime: '00:00',
-            isEcartAvailable: false,
-          },
-        };
-
-        if (direction === 'N') {
-          newStopper.x = this.selectedStopper.x;
-          newStopper.y = this.selectedStopper.y - 100;
-        } else if (direction === 'S') {
-          newStopper.x = this.selectedStopper.x;
-          newStopper.y = this.selectedStopper.y + 100;
-        } else if (direction === 'E') {
-          newStopper.x = this.selectedStopper.x + 100;
-          newStopper.y = this.selectedStopper.y;
-        } else if (direction === 'W') {
-          newStopper.x = this.selectedStopper.x - 100;
-          newStopper.y = this.selectedStopper.y;
-        }
-
-        newStopper.connections[oppositeDirection[direction]] =
-          this.selectedStopper.id;
-        this.selectedStopper.connections[direction] = newNeighborId;
-        this.stoppers.push(newStopper);
-        this.selectedStopper = newStopper;
-      }
-      this.updateSvgDimensions();
-      this.cdr.markForCheck();
+      this.showNewStopperDialog = true;
     }
+    // This will trigger the adding of new stoppers
+    this.directionClicked = direction;
     this.hasChanges = true;
+  }
+
+  cancelAddingOfNewStopper() {
+    this.newStopper = {
+      id: '',
+      data: {
+        description: '',
+      },
+    };
+
+    this.showNewStopperDialog = false;
+  }
+
+  saveNewStopper() {
+    let direction = this.directionClicked;
+    const oppositeDirection = {
+      N: 'S',
+      S: 'N',
+      E: 'W',
+      W: 'E',
+    };
+
+    const newNeighborId = this.newStopper.id;
+    const newStoppedDescription = this.newStopper.data.description;
+    const newNeighborStopper = this.getStopperById(newNeighborId);
+    if (newNeighborStopper) {
+      this.selectedStopper.connections[direction] = newNeighborId;
+      newNeighborStopper.connections[oppositeDirection[direction]] =
+        this.selectedStopper.id;
+    } else {
+      // Create a new stopper in that direction and redraw the map
+      const newStopper = {
+        id: newNeighborId,
+        x: 0,
+        y: 0,
+        color: 'blue',
+        connections: { N: null, S: null, E: null, W: null },
+        data: {
+          eCartId: '',
+          description: newStoppedDescription,
+          arrivalTime: '00:00',
+          isEcartAvailable: false,
+        },
+      };
+
+      if (direction === 'N') {
+        newStopper.x = this.selectedStopper.x;
+        newStopper.y = this.selectedStopper.y - 100;
+      } else if (direction === 'S') {
+        newStopper.x = this.selectedStopper.x;
+        newStopper.y = this.selectedStopper.y + 100;
+      } else if (direction === 'E') {
+        newStopper.x = this.selectedStopper.x + 100;
+        newStopper.y = this.selectedStopper.y;
+      } else if (direction === 'W') {
+        newStopper.x = this.selectedStopper.x - 100;
+        newStopper.y = this.selectedStopper.y;
+      }
+
+      newStopper.connections[oppositeDirection[direction]] =
+        this.selectedStopper.id;
+      this.selectedStopper.connections[direction] = newNeighborId;
+      this.stoppers.push(newStopper);
+      this.selectedStopper = newStopper;
+    }
+    this.updateSvgDimensions();
+    this.cancelAddingOfNewStopper();
+    this.cdr.markForCheck();
+    this.directionClicked = null;
   }
 
   removeStopper() {
@@ -353,7 +395,8 @@ export class EcartMapComponent implements OnInit {
     const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
     const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
 
-    // Adjust the coordinates of stoppers based on minimum values, since having negative values will case the SVG to not render
+    // Adjust the coordinates of stoppers based on minimum values,
+    // since having negative values will case the SVG to not render the new stopper
     this.stoppers.forEach((stopper) => {
       stopper.x = stopper.x - minX + this.padding;
       stopper.y = stopper.y - minY + this.padding;
