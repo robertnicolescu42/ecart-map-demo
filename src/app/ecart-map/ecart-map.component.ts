@@ -418,6 +418,8 @@ export class EcartMapComponent implements OnInit {
 
   cancelEdit() {
     this.isEditMode = false;
+    this.contextualMenuVisible = false;
+    this.selectedStopper = null;
     this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
     this.hasChanges = false;
   }

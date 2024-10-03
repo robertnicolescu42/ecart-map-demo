@@ -112,11 +112,10 @@
 
       <!-- Contextual Menu -->
       <div
+        *ngIf="isEditMode"
         class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
-        <div
-          *ngIf="isEditMode && contextualMenuVisible; else noStopperSelected"
-        >
+        <div *ngIf="contextualMenuVisible; else noStopperSelected">
           <h5>Stopper: {{ selectedStopper?.id }}</h5>
           <p>
             <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId }}<br />
