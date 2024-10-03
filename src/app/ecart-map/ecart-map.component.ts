@@ -289,7 +289,42 @@ export class EcartMapComponent implements OnInit {
         this.selectedStopper.connections[direction] = newNeighborId;
         newNeighborStopper.connections[oppositeDirection[direction]] =
           this.selectedStopper.id;
+      } else {
+        // Create a new stopper in that direction and redraw the map
+        const newStopper = {
+          id: newNeighborId,
+          x: 0,
+          y: 0,
+          color: 'blue',
+          connections: { N: null, S: null, E: null, W: null },
+          data: {
+            eCartId: newNeighborId,
+            description: 'New Stopper',
+            arrivalTime: '00:00',
+            isEcartAvailable: true,
+          },
+        };
+
+        if (direction === 'N') {
+          newStopper.x = this.selectedStopper.x;
+          newStopper.y = this.selectedStopper.y - 100;
+        } else if (direction === 'S') {
+          newStopper.x = this.selectedStopper.x;
+          newStopper.y = this.selectedStopper.y + 100;
+        } else if (direction === 'E') {
+          newStopper.x = this.selectedStopper.x + 100;
+          newStopper.y = this.selectedStopper.y;
+        } else if (direction === 'W') {
+          newStopper.x = this.selectedStopper.x - 100;
+          newStopper.y = this.selectedStopper.y;
+        }
+
+        newStopper.connections[oppositeDirection[direction]] =
+          this.selectedStopper.id;
+        this.selectedStopper.connections[direction] = newNeighborId;
+        this.stoppers.push(newStopper);
       }
+      this.updateSvgDimensions();
     }
   }
 
