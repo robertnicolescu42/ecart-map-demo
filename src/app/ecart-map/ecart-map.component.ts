@@ -166,102 +166,18 @@ export class EcartMapComponent implements OnInit {
   contextualMenuVisible = false;
   menuPosition = { x: 0, y: 0 };
   possibleStoppers = [
-    {
-      id: 'stopper1',
-      data: {
-        description: 'Stopper 1',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper2',
-      data: {
-        description: 'Stopper 2',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper3',
-      data: {
-        description: 'Stopper 3',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper4',
-      data: {
-        description: 'Stopper 4',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper5',
-      data: {
-        description: 'Stopper 5',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper6',
-      data: {
-        description: 'Stopper 6',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper7',
-      data: {
-        description: 'Stopper 7',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper8',
-      data: {
-        description: 'Stopper 8',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper9',
-      data: {
-        description: 'Stopper 9',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper10',
-      data: {
-        description: 'Stopper 10',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper11',
-      data: {
-        description: 'Stopper 11',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper12',
-      data: {
-        description: 'Stopper 12',
-        eCartId: '',
-        isEcartAvailable: false,
-      },
-    },
+    'stopper1',
+    'stopper2',
+    'stopper3',
+    'stopper4',
+    'stopper5',
+    'stopper6',
+    'stopper7',
+    'stopper8',
+    'stopper9',
+    'stopper10',
+    'stopper11',
+    'stopper12',
   ];
 
   ngOnInit(): void {
@@ -273,7 +189,6 @@ export class EcartMapComponent implements OnInit {
   }
 
   showDetails(stopper) {
-    console.log('🚀 ~ EcartMapComponent ~ showDetails ~ stopper:', stopper);
     this.hoveredStopper = stopper;
   }
 
@@ -293,25 +208,24 @@ export class EcartMapComponent implements OnInit {
   }
 
   addRemoveNeighborLabel(direction: string): string {
-    const currentNeighborId = this.selectedStopper.connections[direction];
-    const stopperInDirection = this.getStopperByPosition(
-      this.selectedStopper,
-      direction
-    );
+    if (this.selectedStopper.id) {
+      const currentNeighborId = this.selectedStopper.connections[direction];
+      const stopperInDirection = this.getStopperByPosition(
+        this.selectedStopper,
+        direction
+      );
 
-    if (currentNeighborId) {
-      return `Remove ${direction}`;
-    } else if (stopperInDirection) {
-      return `Link to ${direction}`;
-    } else {
+      if (currentNeighborId && stopperInDirection.isLinked) {
+        return `Unlink ${direction}`;
+      } else if (stopperInDirection.stopper) {
+        return `Link ${direction}`;
+      }
       return `Add ${direction}`;
     }
+    return '';
   }
 
-  getStopperByPosition(
-    stopper: Stopper,
-    direction: string
-  ): Stopper | undefined {
+  getStopperByPosition(stopper: Stopper, direction: string) {
     const offset = 100; // Set offset between neighboring stoppers
 
     let deltaX = 0;
@@ -322,9 +236,26 @@ export class EcartMapComponent implements OnInit {
     if (direction === 'E') deltaX = offset;
     if (direction === 'W') deltaX = -offset;
 
-    return this.stoppers.find(
+    const foundStopper = this.stoppers.find(
       (s) => s.x === stopper.x + deltaX && s.y === stopper.y + deltaY
     );
+
+    return {
+      stopper: foundStopper,
+      isLinked: this.isStopperLinked(stopper, foundStopper),
+    };
+  }
+
+  isStopperLinked(stopper1: Stopper, stopper2: Stopper | undefined): boolean {
+    if (!stopper2) return false;
+    Object.keys(stopper1.connections).forEach((connection) => {
+      if (stopper1.connections[connection] === stopper2?.id) {
+        return true;
+      }
+      return false;
+    });
+
+    return true;
   }
 
   addRemoveNeighbor(direction: string) {
@@ -339,7 +270,7 @@ export class EcartMapComponent implements OnInit {
     const stopperInDirection = this.getStopperByPosition(
       this.selectedStopper,
       direction
-    );
+    ).stopper;
 
     if (currentNeighborId) {
       // If there's already a connection, remove it
@@ -394,68 +325,5 @@ export class EcartMapComponent implements OnInit {
       width: maxX + 50,
       height: maxY + 50,
     };
-  }
-
-  showStopperDropdown = false;
-  selectedStopperToAdd = null;
-  selectedDirection = '';
-
-  prepareAddStopper(direction: string) {
-    this.selectedDirection = direction;
-    this.showStopperDropdown = true;
-  }
-
-  addStopper(direction: string) {
-    if (!this.selectedStopperToAdd) return;
-    console.log(
-      '🚀 ~ EcartMapComponent ~ addStopper ~ this.selectedStopperToAdd:',
-      this.selectedStopperToAdd
-    );
-
-    const newStopper = { ...this.selectedStopperToAdd };
-    const oppositeDirection = { N: 'S', S: 'N', E: 'W', W: 'E' };
-
-    // Calculate the position based on direction
-    const offset = 100;
-    let newX = this.selectedStopper.x;
-    let newY = this.selectedStopper.y;
-
-    if (direction === 'N') newY -= offset;
-    if (direction === 'S') newY += offset;
-    if (direction === 'E') newX += offset;
-    if (direction === 'W') newX -= offset;
-
-    // Update the position of the new stopper
-    newStopper.x = newX;
-    newStopper.y = newY;
-    newStopper.connections = { N: null, S: null, E: null, W: null };
-
-    // Link the new stopper to the original stopper ( i sometimes feel like methods need some kind of DIVs inside them...)
-    newStopper.connections[oppositeDirection[direction]] =
-      this.selectedStopper.id;
-
-    // Link the original stopper to the newly added stopper
-    this.selectedStopper.connections[direction] = newStopper.id;
-
-    // have to look better at this in the future
-    console.log(
-      '🚀 ~ EcartMapComponent ~ addStopper ~ newStopper:',
-      newStopper
-    );
-
-    // Add the new stopper to the stoppers array
-    this.stoppers.push(newStopper);
-
-    console.log(
-      '🚀 ~ EcartMapComponent ~ addStopper ~ this.stoppers:',
-      this.stoppers
-    );
-
-    this.showStopperDropdown = false;
-    this.updateSvgDimensions();
-  }
-
-  prepareAddFirstStopper() {
-    this.showStopperDropdown = true;
   }
 }
