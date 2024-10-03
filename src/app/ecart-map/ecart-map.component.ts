@@ -303,7 +303,7 @@ export class EcartMapComponent implements OnInit {
             eCartId: newNeighborId,
             description: 'New Stopper',
             arrivalTime: '00:00',
-            isEcartAvailable: true,
+            isEcartAvailable: false,
           },
         };
 
