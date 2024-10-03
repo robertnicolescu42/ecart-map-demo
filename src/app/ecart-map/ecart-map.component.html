@@ -19,7 +19,11 @@
         <button class="btn btn-danger me-2" (click)="cancelEdit()">
           <i class="fas fa-times"></i> Cancel
         </button>
-        <button class="btn btn-success" (click)="saveEdit()">
+        <button
+          class="btn btn-success"
+          (click)="saveEdit()"
+          [disabled]="!hasChanges"
+        >
           <i class="fas fa-check"></i> Save
         </button>
       </div>

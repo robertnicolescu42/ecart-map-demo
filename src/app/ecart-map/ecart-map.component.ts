@@ -166,20 +166,7 @@ export class EcartMapComponent implements OnInit {
 
   contextualMenuVisible = false;
   menuPosition = { x: 0, y: 0 };
-  possibleStoppers = [
-    'stopper1',
-    'stopper2',
-    'stopper3',
-    'stopper4',
-    'stopper5',
-    'stopper6',
-    'stopper7',
-    'stopper8',
-    'stopper9',
-    'stopper10',
-    'stopper11',
-    'stopper12',
-  ];
+  hasChanges = false;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -331,6 +318,7 @@ export class EcartMapComponent implements OnInit {
       this.updateSvgDimensions();
       this.cdr.markForCheck();
     }
+    this.hasChanges = true;
   }
 
   removeStopper() {
@@ -348,6 +336,7 @@ export class EcartMapComponent implements OnInit {
 
     // Remove the stopper from the array
     this.stoppers = this.stoppers.filter((stopper) => stopper.id !== stopperId);
+    this.hasChanges = true;
     this.updateSvgDimensions();
     this.cdr.markForCheck();
     this.closeMenu();
@@ -381,16 +370,19 @@ export class EcartMapComponent implements OnInit {
   enterEditMode() {
     this.isEditMode = true;
     this.originalStoppers = JSON.parse(JSON.stringify(this.stoppers)); // Deep copy of stoppers
+    this.hasChanges = false;
   }
 
   cancelEdit() {
     this.isEditMode = false;
     this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
+    this.hasChanges = false;
   }
 
   // Save edit mode changes
   saveEdit() {
     this.isEditMode = false;
+    this.hasChanges = false;
     this.applyChanges();
   }
 
