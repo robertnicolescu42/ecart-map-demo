@@ -26,6 +26,7 @@ interface PartialStopper {
   id: string;
   data: {
     description?: string;
+    distance?: number;
   };
 }
 
@@ -44,6 +45,7 @@ export class EcartMapComponent implements OnInit {
     id: '',
     data: {
       description: '',
+      distance: 1,
     },
   };
   padding = 50;
@@ -319,6 +321,7 @@ export class EcartMapComponent implements OnInit {
       id: '',
       data: {
         description: '',
+        distance: 1,
       },
     };
 
@@ -451,6 +454,7 @@ export class EcartMapComponent implements OnInit {
   saveEdit() {
     this.isEditMode = false;
     this.hasChanges = false;
+    this.selectedStopper = null;
     this.applyChanges();
   }
 
