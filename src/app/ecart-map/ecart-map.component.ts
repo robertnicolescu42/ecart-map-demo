@@ -309,11 +309,50 @@ export class EcartMapComponent implements OnInit {
       stopperInDirection.connections[oppositeDirection[direction]] =
         this.selectedStopper.id;
     } else {
-      this.showNewStopperDialog = true;
+      // If no existing stopper, check if we can add a new one
+      if (this.canAddStopperInDirection(direction)) {
+        this.showNewStopperDialog = true;
+        this.directionClicked = direction;
+      } else {
+        alert('Cannot add stopper. Another stopper exists in between.');
+      }
     }
-    // This will trigger the adding of new stoppers
-    this.directionClicked = direction;
     this.hasChanges = true;
+  }
+
+  canAddStopperInDirection(direction: string): boolean {
+    const distance = this.newStopper.data.distance || 1;
+    const step = 100 * distance;
+    let deltaX = 0,
+      deltaY = 0;
+
+    switch (direction) {
+      case 'N':
+        deltaY = -step;
+        break;
+      case 'S':
+        deltaY = step;
+        break;
+      case 'E':
+        deltaX = step;
+        break;
+      case 'W':
+        deltaX = -step;
+        break;
+    }
+
+    const targetX = this.selectedStopper.x + deltaX;
+    const targetY = this.selectedStopper.y + deltaY;
+
+    // Check for any stoppers between current and target position
+    for (let i = 1; i <= distance; i++) {
+      const checkX = this.selectedStopper.x + (deltaX / distance) * i;
+      const checkY = this.selectedStopper.y + (deltaY / distance) * i;
+      if (this.stoppers.find((s) => s.x === checkX && s.y === checkY)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   cancelAddingOfNewStopper() {
@@ -338,48 +377,52 @@ export class EcartMapComponent implements OnInit {
     };
 
     const newNeighborId = this.newStopper.id;
-    const newStoppedDescription = this.newStopper.data.description;
-    const newNeighborStopper = this.getStopperById(newNeighborId);
-    if (newNeighborStopper) {
-      this.selectedStopper.connections[direction] = newNeighborId;
-      newNeighborStopper.connections[oppositeDirection[direction]] =
-        this.selectedStopper.id;
-    } else {
-      // Create a new stopper in that direction and redraw the map
-      const newStopper = {
-        id: newNeighborId,
-        x: 0,
-        y: 0,
-        color: 'blue',
-        connections: { N: null, S: null, E: null, W: null },
-        data: {
-          eCartId: '',
-          description: newStoppedDescription,
-          arrivalTime: '00:00',
-          isEcartAvailable: false,
-        },
-      };
 
-      if (direction === 'N') {
-        newStopper.x = this.selectedStopper.x;
-        newStopper.y = this.selectedStopper.y - 100;
-      } else if (direction === 'S') {
-        newStopper.x = this.selectedStopper.x;
-        newStopper.y = this.selectedStopper.y + 100;
-      } else if (direction === 'E') {
-        newStopper.x = this.selectedStopper.x + 100;
-        newStopper.y = this.selectedStopper.y;
-      } else if (direction === 'W') {
-        newStopper.x = this.selectedStopper.x - 100;
-        newStopper.y = this.selectedStopper.y;
-      }
-
-      newStopper.connections[oppositeDirection[direction]] =
-        this.selectedStopper.id;
-      this.selectedStopper.connections[direction] = newNeighborId;
-      this.stoppers.push(newStopper);
-      this.selectedStopper = newStopper;
+    // Check for duplicate stopper ID
+    if (this.getStopperById(newNeighborId)) {
+      alert('A stopper with this ID already exists.');
+      return;
     }
+
+    const newStoppedDescription = this.newStopper.data.description;
+    const distance = this.newStopper.data.distance || 1;
+    const step = 100 * distance;
+
+    const newStopper: Stopper = {
+      id: newNeighborId,
+      x: this.selectedStopper.x,
+      y: this.selectedStopper.y,
+      color: 'blue',
+      connections: { N: null, S: null, E: null, W: null },
+      data: {
+        eCartId: '',
+        description: newStoppedDescription,
+        arrivalTime: '00:00',
+        isEcartAvailable: false,
+      },
+    };
+
+    // Set position based on direction and distance
+    switch (direction) {
+      case 'N':
+        newStopper.y -= step;
+        break;
+      case 'S':
+        newStopper.y += step;
+        break;
+      case 'E':
+        newStopper.x += step;
+        break;
+      case 'W':
+        newStopper.x -= step;
+        break;
+    }
+
+    newStopper.connections[oppositeDirection[direction]] =
+      this.selectedStopper.id;
+    this.selectedStopper.connections[direction] = newNeighborId;
+    this.stoppers.push(newStopper);
+
     this.hasChanges = true;
     this.updateSvgDimensions();
     this.cancelAddingOfNewStopper();
