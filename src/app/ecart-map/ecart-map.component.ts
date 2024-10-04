@@ -245,6 +245,8 @@ export class EcartMapComponent implements OnInit {
    * @returns A string label indicating the action to be taken (e.g., 'Unlink north', 'Link south', 'Add east').
    */
   addRemoveNeighborLabel(direction: string): string {
+    // TODO - fix label logic, what happens when you have an unlinked neighbor two spaces away and you want to link it with one click?
+    // also, select the new stopper after you finish adding it
     if (this.selectedStopper) {
       if (this.selectedStopper.id) {
         const currentNeighborId = this.selectedStopper.connections[direction];

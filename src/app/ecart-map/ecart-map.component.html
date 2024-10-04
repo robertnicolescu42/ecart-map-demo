@@ -4,6 +4,35 @@
   <div class="text-center map-container border rounded p-3">
     <p class="h3 p-2 map-title text-black">eCart map example</p>
     <hr />
+    <!-- Legend Section -->
+    <div class="legend mb-3">
+      <div class="d-flex align-items-center">
+        <div *ngIf="!isEditMode" class="me-3">
+          <svg width="20" height="20">
+            <circle class="ecart-available" cx="10" cy="10" r="8"></circle>
+          </svg>
+          <span class="ms-1">eCart Available</span>
+        </div>
+        <div *ngIf="!isEditMode" class="me-3">
+          <svg width="20" height="20">
+            <circle class="ecart-unavailable" cx="10" cy="10" r="8"></circle>
+          </svg>
+          <span class="ms-1">eCart Unavailable</span>
+        </div>
+        <div *ngIf="isEditMode" class="me-3">
+          <svg width="20" height="20">
+            <circle class="ecart-available" cx="10" cy="10" r="8"></circle>
+          </svg>
+          <span class="ms-1">Stopper</span>
+        </div>
+        <div *ngIf="isEditMode">
+          <svg width="20" height="20">
+            <circle class="ecart-selected" cx="10" cy="10" r="8"></circle>
+          </svg>
+          <span class="ms-1">Selected Stopper</span>
+        </div>
+      </div>
+    </div>
     <div class="toolbar mb-3">
       <!-- Edit mode button -->
       <button
