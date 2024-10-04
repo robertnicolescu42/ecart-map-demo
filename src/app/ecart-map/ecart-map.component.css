@@ -66,3 +66,20 @@
     opacity: 1;
   }
 }
+
+.legend {
+  background-color: #f8f9fa;
+  cursor: default;
+}
+
+.legend svg {
+  transition: transform 0.2s;
+}
+
+.legend svg:hover {
+  transform: scale(1.1);
+}
+
+.legend span {
+  font-weight: 500;
+}
