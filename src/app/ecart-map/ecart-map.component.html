@@ -102,6 +102,29 @@
           (mouseout)="hideDetails()"
           (click)="isEditMode && onStopperClick(stopper, $event)"
         ></circle>
+
+        <!-- Render the temporary stopper -->
+        <g *ngIf="tempStopper">
+          <circle
+            id="temp-stopper-{{ tempStopper.id }}"
+            [attr.cx]="tempStopper.x"
+            [attr.cy]="tempStopper.y"
+            r="10"
+            class="fade-in-out"
+            stroke="black"
+            fill="transparent"
+            stroke-width="2"
+          />
+          <line
+            *ngIf="selectedStopper"
+            [attr.x1]="selectedStopper.x"
+            [attr.y1]="selectedStopper.y"
+            [attr.x2]="tempStopper.x"
+            [attr.y2]="tempStopper.y"
+            stroke="black"
+            stroke-dasharray="5, 5"
+          />
+        </g>
       </svg>
 
       <!-- Tooltip Template -->
@@ -121,7 +144,7 @@
         class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
         <div *ngIf="contextualMenuVisible; else noStopperSelected">
-          <div *ngIf="this.selectedStopper.id !== ''">
+          <div *ngIf="this.selectedStopper && this.selectedStopper.id !== ''">
             <h5>Stopper: {{ selectedStopper?.id }}</h5>
             <p>
               <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId
@@ -223,16 +246,18 @@
       placeholder="Enter description"
       [(ngModel)]="newStopper.data.description"
     />
+    <!-- change this to be a dropdown with numbers 1-10 -->
     <label for="newStopperDistanceInput">Distance</label>
-    <input
-      type="number"
+    <select
       class="form-control"
       id="newStopperDistanceInput"
-      placeholder="Enter distance"
-      min="1"
-      max="10"
+      (change)="onDistanceChange(newStopper.data.distance)"
       [(ngModel)]="newStopper.data.distance"
-    />
+    >
+      <option *ngFor="let distance of arrayOfDistances" [value]="distance">
+        {{ distance }}
+      </option>
+    </select>
   </div>
   <div class="py-2">
     <button

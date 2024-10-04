@@ -184,6 +184,11 @@ export class EcartMapComponent implements OnInit {
   contextualMenuVisible = false;
   menuPosition = { x: 0, y: 0 };
   hasChanges = false;
+  tempStopper: Stopper | null = null;
+  maxDistance = 5;
+  arrayOfDistances: number[] = Array.from(Array(this.maxDistance)).map(
+    (e, i) => i + 1
+  ); // This will create an array from 1 to maxDistance
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -233,20 +238,28 @@ export class EcartMapComponent implements OnInit {
     this.selectedStopper = null;
   }
 
+  /**
+   * Determines the appropriate label for adding or removing a neighbor stopper in a given direction.
+   *
+   * @param direction - The direction in which to add or remove the neighbor stopper (e.g., 'north', 'south', 'east', 'west').
+   * @returns A string label indicating the action to be taken (e.g., 'Unlink north', 'Link south', 'Add east').
+   */
   addRemoveNeighborLabel(direction: string): string {
-    if (this.selectedStopper.id) {
-      const currentNeighborId = this.selectedStopper.connections[direction];
-      const stopperInDirection = this.getStopperByPosition(
-        this.selectedStopper,
-        direction
-      );
+    if (this.selectedStopper) {
+      if (this.selectedStopper.id) {
+        const currentNeighborId = this.selectedStopper.connections[direction];
+        const stopperInDirection = this.getStopperByPosition(
+          this.selectedStopper,
+          direction
+        );
 
-      if (currentNeighborId && stopperInDirection.isLinked) {
-        return `Unlink ${direction}`;
-      } else if (stopperInDirection.stopper) {
-        return `Link ${direction}`;
+        if (currentNeighborId && stopperInDirection.isLinked) {
+          return `Unlink ${direction}`;
+        } else if (stopperInDirection.stopper) {
+          return `Link ${direction}`;
+        }
+        return `Add ${direction}`;
       }
-      return `Add ${direction}`;
     }
     return '';
   }
@@ -284,6 +297,27 @@ export class EcartMapComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Adds or removes a neighbor stopper in the specified direction.
+   *
+   * This method handles the logic for adding or removing a connection
+   * between the currently selected stopper and another stopper in the
+   * specified direction. If a connection already exists, it will be removed.
+   * If no connection exists, it will attempt to create one.
+   *
+   * @param direction - The direction in which to add or remove a neighbor stopper.
+   *                    Valid values are 'N', 'S', 'E', 'W'.
+   *
+   * The method performs the following steps:
+   * 1. Determines the opposite direction.
+   * 2. Retrieves the current neighbor stopper ID in the specified direction.
+   * 3. Finds the stopper in the specified direction.
+   * 4. If a connection exists, it removes the connection.
+   * 5. If no connection exists but a stopper is found in the direction, it links to the existing stopper.
+   * 6. If no stopper is found, it checks if a new stopper can be added in the direction.
+   * 7. If a new stopper can be added, it shows a dialog to add a new stopper.
+   * 8. If a new stopper cannot be added, it alerts the user.
+   */
   addRemoveNeighbor(direction: string) {
     const oppositeDirection = {
       N: 'S',
@@ -313,6 +347,10 @@ export class EcartMapComponent implements OnInit {
       if (this.canAddStopperInDirection(direction)) {
         this.showNewStopperDialog = true;
         this.directionClicked = direction;
+        this.updateTempStopperPosition(
+          this.newStopper.data.distance || 1,
+          direction
+        );
       } else {
         alert('Cannot add stopper. Another stopper exists in between.');
       }
@@ -365,6 +403,8 @@ export class EcartMapComponent implements OnInit {
     };
 
     this.showNewStopperDialog = false;
+    this.tempStopper = null;
+    this.updateSvgDimensions();
   }
 
   saveNewStopper() {
@@ -427,6 +467,7 @@ export class EcartMapComponent implements OnInit {
     this.updateSvgDimensions();
     this.cancelAddingOfNewStopper();
     this.cdr.markForCheck();
+    this.tempStopper = null;
     this.directionClicked = null;
   }
 
@@ -456,14 +497,38 @@ export class EcartMapComponent implements OnInit {
     this.closeMenu();
   }
 
-  updateSvgDimensions() {
-    const minX = Math.min(...this.stoppers.map((stopper) => stopper.x));
-    const minY = Math.min(...this.stoppers.map((stopper) => stopper.y));
-    const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
-    const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
+  /**
+   * Updates the dimensions of the SVG element based on the positions of stoppers.
+   * If a temporary stopper distance is provided, it includes the temporary stopper
+   * in the calculation of the dimensions.
+   *
+   * @param tempStopperDistance - Optional parameter representing the x and y coordinates
+   *                              of a temporary stopper to be considered in the calculations.
+   *                              If not provided, only the existing stoppers are considered.
+   *
+   * The method calculates the minimum and maximum x and y coordinates among the stoppers,
+   * adjusts the coordinates of the stoppers based on the minimum values, and then calculates
+   * the width and height of the SVG element. The dimensions are set to a minimum of 300x100
+   * if the calculated dimensions are less than these values.
+   */
+  updateSvgDimensions(tempStopperDistance?: { x: number; y: number }) {
+    const stoppersToConsider: any[] = [...this.stoppers];
 
-    // Adjust the coordinates of stoppers based on minimum values,
-    // since having negative values will case the SVG to not render the new stopper
+    // If tempStopperDistance is provided, calculate the temporary stopper's position
+    if (tempStopperDistance) {
+      const tempStopper = {
+        x: tempStopperDistance.x,
+        y: tempStopperDistance.y,
+      };
+      stoppersToConsider.push(tempStopper);
+    }
+
+    const minX = Math.min(...stoppersToConsider.map((stopper) => stopper.x));
+    const minY = Math.min(...stoppersToConsider.map((stopper) => stopper.y));
+    const maxX = Math.max(...stoppersToConsider.map((stopper) => stopper.x));
+    const maxY = Math.max(...stoppersToConsider.map((stopper) => stopper.y));
+
+    // Adjust the coordinates of stoppers based on minimum values
     this.stoppers.forEach((stopper) => {
       stopper.x = stopper.x - minX + this.padding;
       stopper.y = stopper.y - minY + this.padding;
@@ -487,10 +552,12 @@ export class EcartMapComponent implements OnInit {
   cancelEdit() {
     this.isEditMode = false;
     this.contextualMenuVisible = false;
+    this.tempStopper = null;
     this.selectedStopper = null;
     this.showNewStopperDialog = false;
     this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
     this.hasChanges = false;
+    this.updateSvgDimensions();
   }
 
   // Save edit mode changes
@@ -504,5 +571,72 @@ export class EcartMapComponent implements OnInit {
   applyChanges() {
     // save the file to s3
     console.log('Changes saved.');
+  }
+
+  updateTempStopperPosition(distance: number, direction: string) {
+    if (!this.selectedStopper) return;
+
+    const step = 100 * distance; // Distance multiplier for positioning
+    let deltaX = 0,
+      deltaY = 0;
+
+    switch (direction) {
+      case 'N':
+        deltaY = -step;
+        break;
+      case 'S':
+        deltaY = step;
+        break;
+      case 'E':
+        deltaX = step;
+        break;
+      case 'W':
+        deltaX = -step;
+        break;
+    }
+
+    this.tempStopper = {
+      id: 'temp',
+      x: this.selectedStopper.x + deltaX,
+      y: this.selectedStopper.y + deltaY,
+      color: 'transparent',
+      connections: { N: null, S: null, E: null, W: null },
+      data: {
+        eCartId: '',
+        description: 'Temporary Stopper',
+        arrivalTime: '',
+        isEcartAvailable: false,
+      },
+    };
+
+    this.cdr.markForCheck();
+    this.updateSvgDimensions({ x: this.tempStopper.x, y: this.tempStopper.y });
+  }
+
+  addTempStopper(stop: Stopper) {
+    this.tempStopper = stop;
+
+    setTimeout(() => {
+      this.fadeOutTempStopper();
+    }, 3000);
+  }
+
+  fadeOutTempStopper() {
+    const stopperEl = document.getElementById(
+      `temp-stopper-${this.tempStopper?.id}`
+    );
+    if (stopperEl) {
+      stopperEl.classList.add('fade-out');
+      setTimeout(() => {
+        this.tempStopper = null;
+      }, 1000);
+    }
+  }
+
+  onDistanceChange(newDistance: number) {
+    this.newStopper.data.distance = newDistance;
+    if (this.directionClicked) {
+      this.updateTempStopperPosition(newDistance, this.directionClicked);
+    }
   }
 }

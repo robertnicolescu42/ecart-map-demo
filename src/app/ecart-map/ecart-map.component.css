@@ -53,8 +53,16 @@
   fill: lightgreen;
 }
 
-.svg-wrapper {
-  /* width: 100%;
-  height: 100%;
-  overflow: auto; */
+.fade-in-out {
+  animation: fadeInOut 2s infinite;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
