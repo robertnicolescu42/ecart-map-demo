@@ -48,3 +48,7 @@
 .ecart-unavailable {
   fill: gray;
 }
+
+.ecart-selected {
+  fill: lightgreen;
+}

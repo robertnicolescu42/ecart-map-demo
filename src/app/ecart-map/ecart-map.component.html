@@ -91,6 +91,7 @@
           stroke-width="2"
           [tooltip]="popTemplate"
           [ngClass]="{
+            'ecart-selected': stopper.id === this.selectedStopper?.id,
             'ecart-available': stopper.data.isEcartAvailable || isEditMode,
             'ecart-unavailable': !isEditMode && !stopper.data.isEcartAvailable
           }"

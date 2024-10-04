@@ -48,132 +48,132 @@ export class EcartMapComponent implements OnInit {
   };
   padding = 50;
   originalStoppers = [];
-  stoppers: Stopper[] = [];
-  // stoppers: Stopper[] = [
-  //   // First row
-  //   {
-  //     id: 'stopper1',
-  //     x: 50,
-  //     y: 50,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: 'stopper2', W: null },
-  //     data: {
-  //       eCartId: 'e123',
-  //       description: 'Stopper 1',
-  //       arrivalTime: '12:00',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
-  //   {
-  //     id: 'stopper2',
-  //     x: 150,
-  //     y: 50,
-  //     color: 'red',
-  //     connections: { N: null, S: null, E: 'stopper3', W: 'stopper1' },
-  //     data: {
-  //       eCartId: 'e124',
-  //       description: 'Stopper 2',
-  //       arrivalTime: '12:05',
-  //       isEcartAvailable: false,
-  //     },
-  //   },
-  //   {
-  //     id: 'stopper3',
-  //     x: 250,
-  //     y: 50,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: null, W: 'stopper2' },
-  //     data: {
-  //       eCartId: 'e125',
-  //       description: 'Stopper 3',
-  //       arrivalTime: '12:10',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
+  // stoppers: Stopper[] = [];
+  stoppers: Stopper[] = [
+    //   // First row
+    {
+      id: 'stopper1',
+      x: 50,
+      y: 50,
+      color: 'blue',
+      connections: { N: null, S: null, E: 'stopper2', W: null },
+      data: {
+        eCartId: 'e123',
+        description: 'Stopper 1',
+        arrivalTime: '12:00',
+        isEcartAvailable: true,
+      },
+    },
+    {
+      id: 'stopper2',
+      x: 150,
+      y: 50,
+      color: 'red',
+      connections: { N: null, S: null, E: 'stopper3', W: 'stopper1' },
+      data: {
+        eCartId: 'e124',
+        description: 'Stopper 2',
+        arrivalTime: '12:05',
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'stopper3',
+      x: 250,
+      y: 50,
+      color: 'blue',
+      connections: { N: null, S: null, E: null, W: 'stopper2' },
+      data: {
+        eCartId: 'e125',
+        description: 'Stopper 3',
+        arrivalTime: '12:10',
+        isEcartAvailable: true,
+      },
+    },
 
-  //   // Second row
-  //   {
-  //     id: 'stopper4',
-  //     x: 50,
-  //     y: 150,
-  //     color: 'yellow',
-  //     connections: { N: 'stopper1', S: 'stopper7', E: 'stopper5', W: null },
-  //     data: {
-  //       eCartId: 'e126',
-  //       description: 'Stopper 4',
-  //       arrivalTime: '12:15',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
-  //   {
-  //     id: 'stopper5',
-  //     x: 150,
-  //     y: 150,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
-  //     data: {
-  //       eCartId: 'e127',
-  //       description: 'Stopper 5',
-  //       arrivalTime: '12:20',
-  //       isEcartAvailable: false,
-  //     },
-  //   },
-  //   {
-  //     id: 'stopper6',
-  //     x: 250,
-  //     y: 150,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: 'stopper6.1', W: 'stopper5' },
-  //     data: {
-  //       eCartId: 'e128',
-  //       description: 'Stopper 6',
-  //       arrivalTime: '12:25',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
+    // Second row
+    {
+      id: 'stopper4',
+      x: 50,
+      y: 150,
+      color: 'yellow',
+      connections: { N: 'stopper1', S: 'stopper7', E: 'stopper5', W: null },
+      data: {
+        eCartId: 'e126',
+        description: 'Stopper 4',
+        arrivalTime: '12:15',
+        isEcartAvailable: true,
+      },
+    },
+    {
+      id: 'stopper5',
+      x: 150,
+      y: 150,
+      color: 'blue',
+      connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
+      data: {
+        eCartId: 'e127',
+        description: 'Stopper 5',
+        arrivalTime: '12:20',
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'stopper6',
+      x: 250,
+      y: 150,
+      color: 'blue',
+      connections: { N: null, S: null, E: 'stopper6.1', W: 'stopper5' },
+      data: {
+        eCartId: 'e128',
+        description: 'Stopper 6',
+        arrivalTime: '12:25',
+        isEcartAvailable: true,
+      },
+    },
 
-  //   {
-  //     id: 'stopper6.1',
-  //     x: 350,
-  //     y: 150,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: null, W: 'stopper6' },
-  //     data: {
-  //       eCartId: 'e128',
-  //       description: 'Stopper 6.1',
-  //       arrivalTime: '12:25',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
+    {
+      id: 'stopper6.1',
+      x: 350,
+      y: 150,
+      color: 'blue',
+      connections: { N: null, S: null, E: null, W: 'stopper6' },
+      data: {
+        eCartId: 'e128',
+        description: 'Stopper 6.1',
+        arrivalTime: '12:25',
+        isEcartAvailable: true,
+      },
+    },
 
-  //   // Third row
-  //   {
-  //     id: 'stopper7',
-  //     x: 50,
-  //     y: 250,
-  //     color: 'blue',
-  //     connections: { N: 'stopper4', S: null, E: 'stopper8', W: null },
-  //     data: {
-  //       eCartId: 'e129',
-  //       description: 'Stopper 7',
-  //       arrivalTime: '12:30',
-  //       isEcartAvailable: false,
-  //     },
-  //   },
-  //   {
-  //     id: 'stopper8',
-  //     x: 150,
-  //     y: 250,
-  //     color: 'blue',
-  //     connections: { N: null, S: null, E: null, W: 'stopper7' },
-  //     data: {
-  //       eCartId: 'e130',
-  //       description: 'Stopper 8',
-  //       arrivalTime: '12:35',
-  //       isEcartAvailable: true,
-  //     },
-  //   },
-  // ];
+    // Third row
+    {
+      id: 'stopper7',
+      x: 50,
+      y: 250,
+      color: 'blue',
+      connections: { N: 'stopper4', S: null, E: 'stopper8', W: null },
+      data: {
+        eCartId: 'e129',
+        description: 'Stopper 7',
+        arrivalTime: '12:30',
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'stopper8',
+      x: 150,
+      y: 250,
+      color: 'blue',
+      connections: { N: null, S: null, E: null, W: 'stopper7' },
+      data: {
+        eCartId: 'e130',
+        description: 'Stopper 8',
+        arrivalTime: '12:35',
+        isEcartAvailable: true,
+      },
+    },
+  ];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
