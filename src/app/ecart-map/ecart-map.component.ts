@@ -220,6 +220,7 @@ export class EcartMapComponent implements OnInit {
   }
 
   onStopperClick(stopper, event) {
+    this.showNewStopperDialog = false;
     this.selectedStopper = stopper;
     this.contextualMenuVisible = true;
     this.menuPosition = { x: event.clientX, y: event.clientY };
@@ -441,6 +442,7 @@ export class EcartMapComponent implements OnInit {
     this.isEditMode = false;
     this.contextualMenuVisible = false;
     this.selectedStopper = null;
+    this.showNewStopperDialog = false;
     this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
     this.hasChanges = false;
   }
