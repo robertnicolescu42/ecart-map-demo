@@ -59,7 +59,7 @@ export class EcartMapComponent implements OnInit {
       x: 50,
       y: 50,
       color: 'blue',
-      connections: { N: null, S: null, E: 'stopper2', W: null },
+      connections: { N: null, S: 'stopper4', E: null, W: null },
       data: {
         eCartId: 'e123',
         description: 'Stopper 1',
@@ -67,25 +67,25 @@ export class EcartMapComponent implements OnInit {
         isEcartAvailable: true,
       },
     },
-    {
-      id: 'stopper2',
-      x: 150,
-      y: 50,
-      color: 'red',
-      connections: { N: null, S: 'stopper5', E: 'stopper3', W: 'stopper1' },
-      data: {
-        eCartId: 'e124',
-        description: 'Stopper 2',
-        arrivalTime: '12:05',
-        isEcartAvailable: false,
-      },
-    },
+    // {
+    //   id: 'stopper2',
+    //   x: 150,
+    //   y: 50,
+    //   color: 'red',
+    //   connections: { N: null, S: 'stopper5', E: 'stopper3', W: 'stopper1' },
+    //   data: {
+    //     eCartId: 'e124',
+    //     description: 'Stopper 2',
+    //     arrivalTime: '12:05',
+    //     isEcartAvailable: false,
+    //   },
+    // },
     {
       id: 'stopper3',
       x: 250,
       y: 50,
       color: 'blue',
-      connections: { N: null, S: null, E: null, W: 'stopper2' },
+      connections: { N: null, S: null, E: null, W: null },
       data: {
         eCartId: 'e125',
         description: 'Stopper 3',
@@ -113,7 +113,7 @@ export class EcartMapComponent implements OnInit {
       x: 150,
       y: 150,
       color: 'blue',
-      connections: { N: 'stopper2', S: null, E: 'stopper6', W: 'stopper4' },
+      connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
       data: {
         eCartId: 'e127',
         description: 'Stopper 5',
@@ -196,6 +196,7 @@ export class EcartMapComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.stoppers.length === 0) {
+      // Add a default stopper if none exist
       this.contextualMenuVisible = true;
       this.showNewStopperDialog = true;
       this.enterEditMode();
