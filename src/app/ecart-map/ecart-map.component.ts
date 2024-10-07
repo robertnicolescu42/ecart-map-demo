@@ -7,7 +7,7 @@ interface Stopper {
   id: string;
   x: number;
   y: number;
-  color: string;
+  color?: string;
   connections: {
     N: string | null;
     S: string | null;
@@ -41,16 +41,17 @@ export class EcartMapComponent implements OnInit {
   @Input()
   isEditMode = false;
   showNewStopperDialog = false;
-  newStopper: PartialStopper = {
+  emptyStopper: PartialStopper = {
     id: '',
     data: {
       description: '',
       distance: 1,
     },
   };
+  // Deep copy of emptyStopper to avoid reference issues
+  newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
-  // stoppers: Stopper[] = [];
   stoppers: Stopper[] = [
     //   // First row
     {
@@ -71,7 +72,7 @@ export class EcartMapComponent implements OnInit {
       x: 150,
       y: 50,
       color: 'red',
-      connections: { N: null, S: null, E: 'stopper3', W: 'stopper1' },
+      connections: { N: null, S: 'stopper5', E: 'stopper3', W: 'stopper1' },
       data: {
         eCartId: 'e124',
         description: 'Stopper 2',
@@ -112,7 +113,7 @@ export class EcartMapComponent implements OnInit {
       x: 150,
       y: 150,
       color: 'blue',
-      connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
+      connections: { N: 'stopper2', S: null, E: 'stopper6', W: 'stopper4' },
       data: {
         eCartId: 'e127',
         description: 'Stopper 5',
@@ -176,6 +177,7 @@ export class EcartMapComponent implements OnInit {
       },
     },
   ];
+  // stoppers: Stopper[] = [];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -199,9 +201,8 @@ export class EcartMapComponent implements OnInit {
       this.enterEditMode();
       this.selectedStopper = {
         id: '',
-        x: 50,
+        x: 150,
         y: 50,
-        color: 'blue',
         connections: { N: null, S: null, E: null, W: null },
         data: {
           eCartId: '',
@@ -210,6 +211,11 @@ export class EcartMapComponent implements OnInit {
           isEcartAvailable: false,
         },
       };
+      this.updateSvgDimensions({
+        x: this.selectedStopper.x,
+        y: this.selectedStopper.y,
+      });
+      this.tempStopper = this.selectedStopper;
     }
     this.updateSvgDimensions();
   }
@@ -246,7 +252,6 @@ export class EcartMapComponent implements OnInit {
    */
   addRemoveNeighborLabel(direction: string): string {
     // TODO - fix label logic, what happens when you have an unlinked neighbor two spaces away and you want to link it with one click?
-    // also, select the new stopper after you finish adding it
     if (this.selectedStopper) {
       if (this.selectedStopper.id) {
         const currentNeighborId = this.selectedStopper.connections[direction];
@@ -381,9 +386,6 @@ export class EcartMapComponent implements OnInit {
         break;
     }
 
-    const targetX = this.selectedStopper.x + deltaX;
-    const targetY = this.selectedStopper.y + deltaY;
-
     // Check for any stoppers between current and target position
     for (let i = 1; i <= distance; i++) {
       const checkX = this.selectedStopper.x + (deltaX / distance) * i;
@@ -396,19 +398,27 @@ export class EcartMapComponent implements OnInit {
   }
 
   cancelAddingOfNewStopper() {
-    this.newStopper = {
-      id: '',
-      data: {
-        description: '',
-        distance: 1,
-      },
-    };
+    this.newStopper = this.deepClone(this.emptyStopper);
 
     this.showNewStopperDialog = false;
     this.tempStopper = null;
     this.updateSvgDimensions();
   }
 
+  /**
+   * Saves a new stopper to the map. This function performs several tasks:
+   * - Checks for duplicate stopper IDs and alerts the user if a duplicate is found.
+   * - Creates a new stopper object with the specified properties.
+   * - Sets the position of the new stopper based on the direction and distance.
+   * - Updates the connections between the new stopper and the selected stopper.
+   * - Adds the new stopper to the list of stoppers.
+   * - Marks the component as having changes.
+   * - Updates the SVG dimensions.
+   * - Cancels the process of adding a new stopper.
+   * - Marks the component for change detection.
+   * - Resets temporary variables and sets the new stopper as the selected stopper.
+   * - Clones an empty stopper template for future use.
+   */
   saveNewStopper() {
     let direction = this.directionClicked;
     const oppositeDirection = {
@@ -434,7 +444,6 @@ export class EcartMapComponent implements OnInit {
       id: newNeighborId,
       x: this.selectedStopper.x,
       y: this.selectedStopper.y,
-      color: 'blue',
       connections: { N: null, S: null, E: null, W: null },
       data: {
         eCartId: '',
@@ -471,6 +480,8 @@ export class EcartMapComponent implements OnInit {
     this.cdr.markForCheck();
     this.tempStopper = null;
     this.directionClicked = null;
+    this.selectedStopper = newStopper;
+    this.newStopper = this.deepClone(this.emptyStopper);
   }
 
   removeStopper() {
@@ -547,7 +558,7 @@ export class EcartMapComponent implements OnInit {
 
   enterEditMode() {
     this.isEditMode = true;
-    this.originalStoppers = JSON.parse(JSON.stringify(this.stoppers)); // Deep copy of stoppers
+    this.originalStoppers = this.deepClone(this.stoppers); // Deep copy of stoppers
     this.hasChanges = false;
   }
 
@@ -557,7 +568,7 @@ export class EcartMapComponent implements OnInit {
     this.tempStopper = null;
     this.selectedStopper = null;
     this.showNewStopperDialog = false;
-    this.stoppers = JSON.parse(JSON.stringify(this.originalStoppers)); // Revert to original state
+    this.stoppers = this.deepClone(this.originalStoppers); // Revert to original state
     this.hasChanges = false;
     this.updateSvgDimensions();
   }
@@ -575,6 +586,16 @@ export class EcartMapComponent implements OnInit {
     console.log('Changes saved.');
   }
 
+  /**
+   * Updates the position of a temporary stopper based on the given distance and direction.
+   *
+   * @param distance - The distance to move the stopper.
+   * @param direction - The direction to move the stopper ('N' for North, 'S' for South, 'E' for East, 'W' for West).
+   *
+   * This method calculates the new position of a temporary stopper by adjusting its coordinates
+   * based on the specified distance and direction. It then updates the `tempStopper` object with
+   * the new position and triggers change detection and SVG dimension updates.
+   */
   updateTempStopperPosition(distance: number, direction: string) {
     if (!this.selectedStopper) return;
 
@@ -640,5 +661,9 @@ export class EcartMapComponent implements OnInit {
     if (this.directionClicked) {
       this.updateTempStopperPosition(newDistance, this.directionClicked);
     }
+  }
+
+  deepClone(obj: any) {
+    return JSON.parse(JSON.stringify(obj));
   }
 }

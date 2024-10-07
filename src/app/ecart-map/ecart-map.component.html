@@ -6,7 +6,7 @@
     <hr />
     <!-- Legend Section -->
     <div class="legend mb-3 p-3 bg-light border rounded shadow-sm">
-      <div class="d-flex  justify-content-center align-items-center">
+      <div class="d-flex justify-content-center align-items-center">
         <div *ngIf="!isEditMode" class="me-4">
           <svg width="20" height="20">
             <circle class="ecart-available" cx="10" cy="10" r="8"></circle>
@@ -276,17 +276,19 @@
       [(ngModel)]="newStopper.data.description"
     />
     <!-- change this to be a dropdown with numbers 1-10 -->
-    <label for="newStopperDistanceInput">Distance</label>
-    <select
-      class="form-control"
-      id="newStopperDistanceInput"
-      (change)="onDistanceChange(newStopper.data.distance)"
-      [(ngModel)]="newStopper.data.distance"
-    >
-      <option *ngFor="let distance of arrayOfDistances" [value]="distance">
-        {{ distance }}
-      </option>
-    </select>
+    <div *ngIf="stoppers.length > 0">
+      <label for="newStopperDistanceInput">Distance</label>
+      <select
+        class="form-control"
+        id="newStopperDistanceInput"
+        (change)="onDistanceChange(newStopper.data.distance)"
+        [(ngModel)]="newStopper.data.distance"
+      >
+        <option *ngFor="let distance of arrayOfDistances" [value]="distance">
+          {{ distance }}
+        </option>
+      </select>
+    </div>
   </div>
   <div class="py-2">
     <button
