@@ -52,132 +52,132 @@ export class EcartMapComponent implements OnInit {
   newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
-  stoppers: Stopper[] = [
-    //   // First row
-    {
-      id: 'stopper1',
-      x: 50,
-      y: 50,
-      color: 'blue',
-      connections: { N: null, S: 'stopper4', E: null, W: null },
-      data: {
-        eCartId: 'e123',
-        description: 'Stopper 1',
-        arrivalTime: '12:00',
-        isEcartAvailable: true,
-      },
-    },
-    // {
-    //   id: 'stopper2',
-    //   x: 150,
-    //   y: 50,
-    //   color: 'red',
-    //   connections: { N: null, S: 'stopper5', E: 'stopper3', W: 'stopper1' },
-    //   data: {
-    //     eCartId: 'e124',
-    //     description: 'Stopper 2',
-    //     arrivalTime: '12:05',
-    //     isEcartAvailable: false,
-    //   },
-    // },
-    {
-      id: 'stopper3',
-      x: 250,
-      y: 50,
-      color: 'blue',
-      connections: { N: null, S: null, E: null, W: null },
-      data: {
-        eCartId: 'e125',
-        description: 'Stopper 3',
-        arrivalTime: '12:10',
-        isEcartAvailable: true,
-      },
-    },
+  // stoppers: Stopper[] = [
+  //   //   // First row
+  //   {
+  //     id: 'stopper1',
+  //     x: 50,
+  //     y: 50,
+  //     color: 'blue',
+  //     connections: { N: null, S: 'stopper4', E: null, W: null },
+  //     data: {
+  //       eCartId: 'e123',
+  //       description: 'Stopper 1',
+  //       arrivalTime: '12:00',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
+  //   // {
+  //   //   id: 'stopper2',
+  //   //   x: 150,
+  //   //   y: 50,
+  //   //   color: 'red',
+  //   //   connections: { N: null, S: 'stopper5', E: 'stopper3', W: 'stopper1' },
+  //   //   data: {
+  //   //     eCartId: 'e124',
+  //   //     description: 'Stopper 2',
+  //   //     arrivalTime: '12:05',
+  //   //     isEcartAvailable: false,
+  //   //   },
+  //   // },
+  //   {
+  //     id: 'stopper3',
+  //     x: 250,
+  //     y: 50,
+  //     color: 'blue',
+  //     connections: { N: null, S: null, E: null, W: null },
+  //     data: {
+  //       eCartId: 'e125',
+  //       description: 'Stopper 3',
+  //       arrivalTime: '12:10',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
 
-    // Second row
-    {
-      id: 'stopper4',
-      x: 50,
-      y: 150,
-      color: 'yellow',
-      connections: { N: 'stopper1', S: 'stopper7', E: 'stopper5', W: null },
-      data: {
-        eCartId: 'e126',
-        description: 'Stopper 4',
-        arrivalTime: '12:15',
-        isEcartAvailable: true,
-      },
-    },
-    {
-      id: 'stopper5',
-      x: 150,
-      y: 150,
-      color: 'blue',
-      connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
-      data: {
-        eCartId: 'e127',
-        description: 'Stopper 5',
-        arrivalTime: '12:20',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper6',
-      x: 250,
-      y: 150,
-      color: 'blue',
-      connections: { N: null, S: null, E: 'stopper6.1', W: 'stopper5' },
-      data: {
-        eCartId: 'e128',
-        description: 'Stopper 6',
-        arrivalTime: '12:25',
-        isEcartAvailable: true,
-      },
-    },
+  //   // Second row
+  //   {
+  //     id: 'stopper4',
+  //     x: 50,
+  //     y: 150,
+  //     color: 'yellow',
+  //     connections: { N: 'stopper1', S: 'stopper7', E: 'stopper5', W: null },
+  //     data: {
+  //       eCartId: 'e126',
+  //       description: 'Stopper 4',
+  //       arrivalTime: '12:15',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
+  //   {
+  //     id: 'stopper5',
+  //     x: 150,
+  //     y: 150,
+  //     color: 'blue',
+  //     connections: { N: null, S: null, E: 'stopper6', W: 'stopper4' },
+  //     data: {
+  //       eCartId: 'e127',
+  //       description: 'Stopper 5',
+  //       arrivalTime: '12:20',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'stopper6',
+  //     x: 250,
+  //     y: 150,
+  //     color: 'blue',
+  //     connections: { N: null, S: null, E: 'stopper6.1', W: 'stopper5' },
+  //     data: {
+  //       eCartId: 'e128',
+  //       description: 'Stopper 6',
+  //       arrivalTime: '12:25',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
 
-    {
-      id: 'stopper6.1',
-      x: 350,
-      y: 150,
-      color: 'blue',
-      connections: { N: null, S: null, E: null, W: 'stopper6' },
-      data: {
-        eCartId: 'e128',
-        description: 'Stopper 6.1',
-        arrivalTime: '12:25',
-        isEcartAvailable: true,
-      },
-    },
+  //   {
+  //     id: 'stopper6.1',
+  //     x: 350,
+  //     y: 150,
+  //     color: 'blue',
+  //     connections: { N: null, S: null, E: null, W: 'stopper6' },
+  //     data: {
+  //       eCartId: 'e128',
+  //       description: 'Stopper 6.1',
+  //       arrivalTime: '12:25',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
 
-    // Third row
-    {
-      id: 'stopper7',
-      x: 50,
-      y: 250,
-      color: 'blue',
-      connections: { N: 'stopper4', S: null, E: 'stopper8', W: null },
-      data: {
-        eCartId: 'e129',
-        description: 'Stopper 7',
-        arrivalTime: '12:30',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'stopper8',
-      x: 150,
-      y: 250,
-      color: 'blue',
-      connections: { N: null, S: null, E: null, W: 'stopper7' },
-      data: {
-        eCartId: 'e130',
-        description: 'Stopper 8',
-        arrivalTime: '12:35',
-        isEcartAvailable: true,
-      },
-    },
-  ];
-  // stoppers: Stopper[] = [];
+  //   // Third row
+  //   {
+  //     id: 'stopper7',
+  //     x: 50,
+  //     y: 250,
+  //     color: 'blue',
+  //     connections: { N: 'stopper4', S: null, E: 'stopper8', W: null },
+  //     data: {
+  //       eCartId: 'e129',
+  //       description: 'Stopper 7',
+  //       arrivalTime: '12:30',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'stopper8',
+  //     x: 150,
+  //     y: 250,
+  //     color: 'blue',
+  //     connections: { N: null, S: null, E: null, W: 'stopper7' },
+  //     data: {
+  //       eCartId: 'e130',
+  //       description: 'Stopper 8',
+  //       arrivalTime: '12:35',
+  //       isEcartAvailable: true,
+  //     },
+  //   },
+  // ];
+  stoppers: Stopper[] = [];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -191,6 +191,7 @@ export class EcartMapComponent implements OnInit {
   arrayOfDistances: number[] = Array.from(Array(this.maxDistance)).map(
     (e, i) => i + 1
   ); // This will create an array from 1 to maxDistance
+  existingStopperAtDistance: boolean = false;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -272,8 +273,12 @@ export class EcartMapComponent implements OnInit {
     return '';
   }
 
-  getStopperByPosition(stopper: Stopper, direction: string) {
-    const offset = 100; // Set offset between neighboring stoppers
+  getStopperByPosition(
+    stopper: Stopper,
+    direction: string,
+    distance: number = 1
+  ) {
+    const offset = 100 * distance;
 
     let deltaX = 0;
     let deltaY = 0;
@@ -327,6 +332,8 @@ export class EcartMapComponent implements OnInit {
    * 8. If a new stopper cannot be added, it alerts the user.
    */
   addRemoveNeighbor(direction: string) {
+    // seems like there's a bug where the unlink doesn't work if you start with no stoppers.
+    // debugger;
     const oppositeDirection = {
       N: 'S',
       S: 'N',
@@ -334,34 +341,42 @@ export class EcartMapComponent implements OnInit {
       W: 'E',
     };
 
-    const currentNeighborId = this.selectedStopper.connections[direction];
+    const distance = this.newStopper.data.distance || 1;
     const stopperInDirection = this.getStopperByPosition(
       this.selectedStopper,
-      direction
+      direction,
+      distance
     ).stopper;
-
-    if (currentNeighborId) {
-      // If there's already a connection, remove it
-      const neighborStopper = this.getStopperById(currentNeighborId);
-      neighborStopper.connections[oppositeDirection[direction]] = null;
-      this.selectedStopper.connections[direction] = null;
-    } else if (stopperInDirection) {
-      // Link to the existing stopper in the direction
-      this.selectedStopper.connections[direction] = stopperInDirection.id;
-      stopperInDirection.connections[oppositeDirection[direction]] =
-        this.selectedStopper.id;
-    } else {
-      // If no existing stopper, check if we can add a new one
-      if (this.canAddStopperInDirection(direction)) {
-        this.showNewStopperDialog = true;
-        this.directionClicked = direction;
-        this.updateTempStopperPosition(
-          this.newStopper.data.distance || 1,
-          direction
-        );
+    // console.log(
+    //   '🚀 ~ EcartMapComponent ~ addRemoveNeighbor ~ stopperInDirection:',
+    //   stopperInDirection
+    // );
+    if (stopperInDirection) {
+      // debugger;
+      // If a stopper already exists at this distance and it is not linked, just link them
+      if (
+        stopperInDirection.connections[oppositeDirection[direction]] !==
+        this.selectedStopper.id
+      ) {
+        // console.log(
+        //   '🚀 ~ EcartMapComponent ~ addRemoveNeighbor ~ this.isStopperLinked(this.selectedStopper, stopperInDirection):',
+        //   this.isStopperLinked(this.selectedStopper, stopperInDirection)
+        // );
+        this.selectedStopper.connections[direction] = stopperInDirection.id;
+        stopperInDirection.connections[oppositeDirection[direction]] =
+          this.selectedStopper.id;
       } else {
-        alert('Cannot add stopper. Another stopper exists in between.');
+        // If there is a stopper in that direction and they are linked, unlink them
+        this.selectedStopper.connections[direction] = null;
+        stopperInDirection.connections[oppositeDirection[direction]] = null;
       }
+    } else if (this.canAddStopperInDirection(direction)) {
+      // No stopper exists, show dialog to add new stopper
+      this.showNewStopperDialog = true;
+      this.directionClicked = direction;
+      this.updateTempStopperPosition(distance, direction);
+    } else {
+      alert('Cannot add stopper. Another stopper exists in between.');
     }
     this.hasChanges = true;
   }
@@ -421,6 +436,9 @@ export class EcartMapComponent implements OnInit {
    * - Clones an empty stopper template for future use.
    */
   saveNewStopper() {
+    // for some reason the connections aren't properly updated for the new stopper, but they are
+    // updated for the stopper it links to. this still lets the component work properly
+    // but it's not good practice to leave it like this
     let direction = this.directionClicked;
     const oppositeDirection = {
       N: 'S',
@@ -579,6 +597,7 @@ export class EcartMapComponent implements OnInit {
     this.isEditMode = false;
     this.hasChanges = false;
     this.selectedStopper = null;
+    // console.log("🚀 ~ EcartMapComponent ~ saveEdit ~ this.stoppers:", this.stoppers)
     this.applyChanges();
   }
 
