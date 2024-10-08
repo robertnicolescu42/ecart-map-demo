@@ -588,7 +588,8 @@ export class EcartMapComponent implements OnInit {
     this.isEditMode = false;
     this.hasChanges = false;
     this.selectedStopper = null;
-    // console.log("🚀 ~ EcartMapComponent ~ saveEdit ~ this.stoppers:", this.stoppers)
+    this.contextualMenuVisible = false;
+    console.log("🚀 ~ EcartMapComponent ~ saveEdit ~ this.stoppers:", this.stoppers)
     this.applyChanges();
   }
 
