@@ -38,6 +38,9 @@ interface PartialStopper {
   styleUrl: './ecart-map.component.css',
 })
 export class EcartMapComponent implements OnInit {
+  // TODO: change label of the contextual menu to say Unlink for already linked distant stoppers
+  // also, don't let the users add a new stopper that's after an existing stopper
+  // (e.g.if there's a stopper at 1,1 and one at 1,3 don't let the user add a stopper at 1,4 from the 1,1 one)
   @Input()
   isEditMode = false;
   showNewStopperDialog = false;
@@ -52,78 +55,79 @@ export class EcartMapComponent implements OnInit {
   newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
-  stoppers = [
-    {
-      id: '1',
-      x: 50,
-      y: 250,
-      connections: {
-        N: null,
-        S: null,
-        E: '2',
-        W: null,
-        undefined: '',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: '00:00',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '2',
-      x: 450,
-      y: 250,
-      connections: {
-        N: '3',
-        S: null,
-        E: null,
-        W: '1',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: '00:00',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '3',
-      x: 450,
-      y: 50,
-      connections: {
-        N: null,
-        S: '2',
-        E: null,
-        W: '4',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: '00:00',
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '4',
-      x: 50,
-      y: 50,
-      connections: {
-        N: null,
-        S: null,
-        E: '3',
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: '00:00',
-        isEcartAvailable: false,
-      },
-    },
-  ];
-  // stoppers: Stopper[] = [];
+  // stoppers = [
+  //   {
+  //     id: '1',
+  //     x: 50,
+  //     y: 250,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: '2',
+  //       W: null,
+  //       undefined: '',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: '00:00',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '2',
+  //     x: 450,
+  //     y: 250,
+  //     connections: {
+  //       N: '3',
+  //       S: null,
+  //       E: null,
+  //       W: '1',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: '00:00',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '3',
+  //     x: 450,
+  //     y: 50,
+  //     connections: {
+  //       N: null,
+  //       S: '2',
+  //       E: null,
+  //       W: '4',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: '00:00',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '4',
+  //     x: 50,
+  //     y: 50,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: '3',
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: '00:00',
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  // ];
+
+  stoppers: Stopper[] = [];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -200,7 +204,6 @@ export class EcartMapComponent implements OnInit {
    * @returns A string label indicating the action to be taken (e.g., 'Unlink north', 'Link south', 'Add east').
    */
   addRemoveNeighborLabel(direction: string): string {
-    // TODO - fix label logic, what happens when you have an unlinked neighbor two spaces away and you want to link it with one click?
     if (this.selectedStopper) {
       if (this.selectedStopper.id) {
         const currentNeighborId = this.selectedStopper.connections[direction];
@@ -436,7 +439,10 @@ export class EcartMapComponent implements OnInit {
         this.directionClicked,
         this.newStopper.data.distance
       ).stopper;
-      console.log("🚀 ~ EcartMapComponent ~ saveNewStopper ~ stopperInPosition:", stopperInPosition)
+      console.log(
+        '🚀 ~ EcartMapComponent ~ saveNewStopper ~ stopperInPosition:',
+        stopperInPosition
+      );
       this.linkDistantStoppers(
         stopperInPosition,
         this.newStopper.data.distance,
