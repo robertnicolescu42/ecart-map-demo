@@ -347,21 +347,12 @@ export class EcartMapComponent implements OnInit {
       direction,
       distance
     ).stopper;
-    // console.log(
-    //   '🚀 ~ EcartMapComponent ~ addRemoveNeighbor ~ stopperInDirection:',
-    //   stopperInDirection
-    // );
     if (stopperInDirection) {
-      // debugger;
       // If a stopper already exists at this distance and it is not linked, just link them
       if (
         stopperInDirection.connections[oppositeDirection[direction]] !==
         this.selectedStopper.id
       ) {
-        // console.log(
-        //   '🚀 ~ EcartMapComponent ~ addRemoveNeighbor ~ this.isStopperLinked(this.selectedStopper, stopperInDirection):',
-        //   this.isStopperLinked(this.selectedStopper, stopperInDirection)
-        // );
         this.selectedStopper.connections[direction] = stopperInDirection.id;
         stopperInDirection.connections[oppositeDirection[direction]] =
           this.selectedStopper.id;

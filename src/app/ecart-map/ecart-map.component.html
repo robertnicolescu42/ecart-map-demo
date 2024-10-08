@@ -161,8 +161,10 @@
         <div *ngIf="hoveredStopper" class="text-start">
           <strong>ID:</strong> {{ hoveredStopper.id }}<br />
           <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
-          <strong>Description:</strong> {{ hoveredStopper.data.description
-          }}<br />
+          <strong *ngIf="hoveredStopper.data.description.length > 0"
+            >Description:</strong
+          >
+          {{ hoveredStopper.data.description }}<br />
           <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
         </div>
       </ng-template>
@@ -176,9 +178,11 @@
           <div *ngIf="this.selectedStopper && this.selectedStopper.id !== ''">
             <h5>Stopper: {{ selectedStopper?.id }}</h5>
             <p>
-              <strong>eCart ID:</strong> {{ selectedStopper?.data.eCartId
-              }}<br />
-              <strong>Description:</strong>
+              <strong>eCart ID:</strong>
+              {{ selectedStopper?.data.eCartId }}<br />
+              <strong *ngIf="selectedStopper?.data.description"
+                >Description:</strong
+              >
               {{ selectedStopper?.data.description }}<br />
             </p>
 
@@ -254,33 +258,38 @@
 </ng-template>
 
 <ng-template #newStopperInputs>
-  <p class="h5 cursor-default">Add new Stopper</p>
+  <p class="h5 cursor-default mb-3">Add new Stopper</p>
   <div class="form-group">
-    <div class="basic-inpouts" *ngIf="!existingStopperAtDistance">
-      <label for="newStopperId"
-        >Stopper ID
-        <span class="text-danger">*</span>
-      </label>
-      <input
-        type="text"
-        class="form-control"
-        id="newStopperId"
-        placeholder="Enter Stopper ID"
-        [(ngModel)]="newStopper.id"
-      />
-      <label for="newStopperDescription">Description</label>
-      <input
-        type="text"
-        class="form-control"
-        id="newStopperDescription"
-        placeholder="Enter description"
-        [(ngModel)]="newStopper.data.description"
-      />
+    <div *ngIf="!existingStopperAtDistance">
+      <div class="mb-3">
+        <label for="newStopperId" class="form-label"
+          >Stopper ID <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="newStopperId"
+          placeholder="Enter Stopper ID"
+          [(ngModel)]="newStopper.id"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="newStopperDescription" class="form-label"
+          >Description</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="newStopperDescription"
+          placeholder="Enter description"
+          [(ngModel)]="newStopper.data.description"
+        />
+      </div>
     </div>
-    <div *ngIf="stoppers.length > 0">
-      <label for="newStopperDistanceInput">Distance</label>
+    <div class="mb-3" *ngIf="stoppers.length > 0">
+      <label for="newStopperDistanceInput" class="form-label">Distance</label>
       <select
-        class="form-control"
+        class="form-select"
         id="newStopperDistanceInput"
         (change)="onDistanceChange(newStopper.data.distance)"
         [(ngModel)]="newStopper.data.distance"
@@ -291,10 +300,10 @@
       </select>
     </div>
   </div>
-  <div class="py-2">
+  <div class="d-flex justify-content-between pt-2">
     <button
       *ngIf="this.stoppers.length > 0"
-      class="btn btn-secondary me-2"
+      class="btn btn-secondary"
       (click)="cancelAddingOfNewStopper()"
     >
       <i class="fas fa-times"></i> Cancel
@@ -306,51 +315,6 @@
         newStopper.id === '' ||
         newStopper.data.distance < 1 ||
         newStopper.data.distance > 10
-      "
-    >
-      <i class="fas fa-check"></i> Save
-    </button>
-  </div>
-</ng-template>
-
-<ng-template #newStopperInputs2>
-  <p class="h5 cursor-default">Add new Stopper</p>
-  <div class="form-group" *ngIf="!existingStopperAtDistance">
-    <label for="newStopperId"
-      >Stopper ID<span class="text-danger">*</span></label
-    >
-    <input
-      type="text"
-      class="form-control"
-      id="newStopperId"
-      placeholder="Enter Stopper ID"
-      [(ngModel)]="newStopper.id"
-    />
-    <label for="newStopperDescription">Description</label>
-    <input
-      type="text"
-      class="form-control"
-      id="newStopperDescription"
-      placeholder="Enter description"
-      [(ngModel)]="newStopper.data.description"
-    />
-  </div>
-  <div *ngIf="existingStopperAtDistance" class="alert alert-info">
-    A stopper already exists at this distance. Save to link the stoppers.
-  </div>
-  <div class="py-2">
-    <button class="btn btn-secondary me-2" (click)="cancelAddingOfNewStopper()">
-      <i class="fas fa-times"></i> Cancel
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="saveNewStopper()"
-      [disabled]="
-        existingStopperAtDistance
-          ? false
-          : newStopper.id === '' ||
-            newStopper.data.distance < 1 ||
-            newStopper.data.distance > 10
       "
     >
       <i class="fas fa-check"></i> Save
