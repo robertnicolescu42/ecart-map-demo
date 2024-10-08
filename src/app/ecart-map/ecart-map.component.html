@@ -110,11 +110,11 @@
         </ng-container>
 
         <!-- Draw stoppers (circles) -->
+        <!-- [attr.fill]="stopper.color" -->
         <circle
           *ngFor="let stopper of stoppers"
           [attr.cx]="stopper.x"
           [attr.cy]="stopper.y"
-          [attr.fill]="stopper.color"
           r="15"
           stroke="black"
           stroke-width="2"
@@ -260,7 +260,7 @@
 <ng-template #newStopperInputs>
   <p class="h5 cursor-default mb-3">Add new Stopper</p>
   <div class="form-group">
-    <div *ngIf="!existingStopperAtDistance">
+    <div *ngIf="!existingStopperAtDistance && !isLinking">
       <div class="mb-3">
         <label for="newStopperId" class="form-label"
           >Stopper ID <span class="text-danger">*</span>
@@ -312,12 +312,13 @@
       class="btn btn-primary"
       (click)="saveNewStopper()"
       [disabled]="
-        newStopper.id === '' ||
-        newStopper.data.distance < 1 ||
-        newStopper.data.distance > 10
+        (newStopper.id === '' ||
+          newStopper.data.distance < 1 ||
+          newStopper.data.distance > 10) &&
+        !isLinking
       "
     >
-      <i class="fas fa-check"></i> Save
+      <i class="fas fa-check"></i> {{ !isLinking ? "Save" : "Link" }}
     </button>
   </div>
 </ng-template>
