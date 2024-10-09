@@ -158,9 +158,9 @@ export class EcartMapComponent implements OnInit {
         y: 50,
         connections: { N: null, S: null, E: null, W: null },
         data: {
-          eCartId: '',
+          eCartId: null,
           description: '',
-          arrivalTime: '12:00',
+          arrivalTime: null,
           isEcartAvailable: false,
         },
       };
@@ -407,7 +407,7 @@ export class EcartMapComponent implements OnInit {
         data: {
           eCartId: '',
           description: newStoppedDescription,
-          arrivalTime: '00:00',
+          arrivalTime: null,
           isEcartAvailable: false,
         },
       };
@@ -607,9 +607,9 @@ export class EcartMapComponent implements OnInit {
       color: 'transparent',
       connections: { N: null, S: null, E: null, W: null },
       data: {
-        eCartId: '',
+        eCartId: null,
         description: 'Temporary Stopper',
-        arrivalTime: '',
+        arrivalTime: null,
         isEcartAvailable: false,
       },
     };
