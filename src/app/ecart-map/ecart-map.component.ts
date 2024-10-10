@@ -15,9 +15,9 @@ interface Stopper {
     W: string | null;
   };
   data: {
-    eCartId: string;
+    eCartId: string | null;
     description: string;
-    arrivalTime: string;
+    arrivalTime: string | null;
     isEcartAvailable: boolean;
   };
 }
