@@ -336,10 +336,14 @@ export class EcartMapComponent implements OnInit {
 
       if (isIntersecting && !isExactMatch) {
         distancesToRemove.push(distance); // collect the distance only if it is intersecting and not an exact match
+      } else if (isExactMatch) {
+        // add all distances that are bigger than the current one
+        distancesToRemove = this.arrayOfDistances.filter((d) => d > distance);
       }
-      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ isIntersecting:", isIntersecting)
-      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ isExactMatch:", isExactMatch)
-      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ distancesToRemove:", distancesToRemove)
+
+      if (distancesToRemove.length > 0) {
+        return;
+      }
     });
 
     // filter out the collected distances
@@ -403,14 +407,6 @@ export class EcartMapComponent implements OnInit {
         let foundStopper = this.stoppers.find(
           (s) => s.x === checkX && s.y === checkY
         );
-        console.log(
-          '🚀 ~ EcartMapComponent ~ checkForIntersection ~ distance:',
-          distance
-        );
-        console.log(
-          '🚀 ~ EcartMapComponent ~ checkForIntersection ~ foundStopper:',
-          foundStopper
-        );
         // HERE'S WHERE A STOPPER IS FOUND
         return false;
       }
@@ -458,10 +454,9 @@ export class EcartMapComponent implements OnInit {
   }
 
   checkIfStopperAtDistance(distance: number, direction: string): boolean {
-    // Assuming you have access to the stoppers' positions and a way to calculate where the new stopper would be
     const currentStopper = this.selectedStopper; // Assuming you are working with a selected stopper
-    let targetPosition = { ...currentStopper.position };
-
+    let targetPosition = { x: currentStopper.x, y: currentStopper.y };
+    distance *= 100;
     // Adjust the target position based on the distance and direction
     switch (direction) {
       case 'N':
@@ -481,9 +476,10 @@ export class EcartMapComponent implements OnInit {
     }
 
     // Check if there is a stopper at the calculated target position
-    return this.stoppers.some((stopper) => {
+    let foundStopper = this.stoppers.some((stopper) => {
       return stopper.x === targetPosition.x && stopper.y === targetPosition.y;
     });
+    return foundStopper;
   }
 
   canAddStopperInDirection(direction: string): boolean {
@@ -716,11 +712,6 @@ export class EcartMapComponent implements OnInit {
     this.hasChanges = false;
     this.selectedStopper = null;
     this.contextualMenuVisible = false;
-    console.log(
-      '🚀 ~ EcartMapComponent ~ saveEdit ~ this.stoppers:',
-      this.stoppers
-    );
-
     this.isLinking = false;
     this.applyChanges();
   }
@@ -804,7 +795,6 @@ export class EcartMapComponent implements OnInit {
     this.isLinking = false;
     this.newStopper.data.distance = newDistance;
     if (this.directionClicked) {
-      console.log(this.stoppers);
       this.updateTempStopperPosition(newDistance, this.directionClicked);
 
       // check if the new stopper overlaps an existing one at this distance and direction,
