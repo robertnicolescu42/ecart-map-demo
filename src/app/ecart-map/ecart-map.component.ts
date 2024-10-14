@@ -55,12 +55,11 @@ export class EcartMapComponent implements OnInit {
   newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
-
   stoppers = [
     {
       id: '1',
       x: 50,
-      y: 250,
+      y: 150,
       connections: {
         N: null,
         S: null,
@@ -78,10 +77,10 @@ export class EcartMapComponent implements OnInit {
     {
       id: '2',
       x: 150,
-      y: 250,
+      y: 150,
       connections: {
         N: null,
-        S: null,
+        S: '5',
         E: '3',
         W: '1',
       },
@@ -94,12 +93,12 @@ export class EcartMapComponent implements OnInit {
     },
     {
       id: '3',
-      x: 350,
-      y: 250,
+      x: 250,
+      y: 150,
       connections: {
-        N: '4',
-        S: null,
-        E: null,
+        N: null,
+        S: '6',
+        E: '4',
         W: '2',
       },
       data: {
@@ -112,12 +111,46 @@ export class EcartMapComponent implements OnInit {
     {
       id: '4',
       x: 350,
-      y: 50,
+      y: 150,
       connections: {
         N: null,
-        S: '3',
+        S: null,
         E: null,
-        W: null,
+        W: '3',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '5',
+      x: 150,
+      y: 250,
+      connections: {
+        N: '2',
+        S: null,
+        E: '6',
+        W: '7',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '6',
+      x: 250,
+      y: 250,
+      connections: {
+        N: '3',
+        S: null,
+        E: '8',
+        W: '5',
       },
       data: {
         eCartId: '',
@@ -129,11 +162,11 @@ export class EcartMapComponent implements OnInit {
     {
       id: '7',
       x: 50,
-      y: 50,
+      y: 250,
       connections: {
         N: null,
-        S: '8',
-        E: null,
+        S: null,
+        E: '5',
         W: null,
       },
       data: {
@@ -145,10 +178,129 @@ export class EcartMapComponent implements OnInit {
     },
     {
       id: '8',
-      x: 50,
+      x: 350,
+      y: 250,
+      connections: {
+        N: null,
+        S: null,
+        E: '9',
+        W: '6',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '9',
+      x: 550,
+      y: 250,
+      connections: {
+        N: '10',
+        S: null,
+        E: '15',
+        W: '8',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '10',
+      x: 550,
       y: 150,
       connections: {
-        N: '7',
+        N: '11',
+        S: '9',
+        E: '12',
+        W: null,
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '11',
+      x: 550,
+      y: 50,
+      connections: {
+        N: null,
+        S: '10',
+        E: null,
+        W: null,
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '12',
+      x: 650,
+      y: 150,
+      connections: {
+        N: null,
+        S: '15',
+        E: '13',
+        W: '10',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '13',
+      x: 1050,
+      y: 150,
+      connections: {
+        N: null,
+        S: null,
+        E: null,
+        W: '12',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '15',
+      x: 650,
+      y: 250,
+      connections: {
+        N: '12',
+        S: '16',
+        E: null,
+        W: '9',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: '16',
+      x: 650,
+      y: 350,
+      connections: {
+        N: '15',
         S: null,
         E: null,
         W: null,
@@ -161,8 +313,6 @@ export class EcartMapComponent implements OnInit {
       },
     },
   ];
-
-  // stoppers: Stopper[] = [];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -173,14 +323,14 @@ export class EcartMapComponent implements OnInit {
   hasChanges = false;
   tempStopper: Stopper | null = null;
   maxDistance = 5;
-  arrayOfDistances: number[] = [];
-  existingStopperAtDistance: boolean = false;
+  arrayOfDistances: number[] = Array.from(Array(this.maxDistance)).map(
+    (e, i) => i + 1
+  ); // This will create an array from 1 to maxDistance
   isLinking: boolean = false;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.arrayOfDistances = this.initializeArrayOfDistances();
     if (this.stoppers.length === 0) {
       // Add a default stopper if none exist
       this.contextualMenuVisible = true;
@@ -220,6 +370,7 @@ export class EcartMapComponent implements OnInit {
   }
 
   onStopperClick(stopper, event) {
+    this.onDistanceChange(1, true);
     this.tempStopper = null;
     this.showNewStopperDialog = false;
     this.selectedStopper = stopper;
@@ -285,9 +436,14 @@ export class EcartMapComponent implements OnInit {
 
   isStopperLinked(stopper1: Stopper, stopper2: Stopper | undefined): boolean {
     if (!stopper2) return false;
-    return Object.keys(stopper1.connections).some(
-      (connection) => stopper1.connections[connection] === stopper2.id
-    );
+    Object.keys(stopper1.connections).forEach((connection) => {
+      if (stopper1.connections[connection] === stopper2?.id) {
+        return true;
+      }
+      return false;
+    });
+
+    return true;
   }
 
   /**
@@ -312,7 +468,6 @@ export class EcartMapComponent implements OnInit {
    * 8. If a new stopper cannot be added, it alerts the user.
    */
   addRemoveNeighbor(direction: string) {
-    this.arrayOfDistances = this.initializeArrayOfDistances();
     const oppositeDirection = {
       N: 'S',
       S: 'N',
@@ -326,31 +481,6 @@ export class EcartMapComponent implements OnInit {
       direction,
       distance
     ).stopper;
-
-    // collect distances to filter out, but allow the distance to remain if it matches an existing stopper's position
-    let distancesToRemove: number[] = [];
-    this.arrayOfDistances.forEach((distance) => {
-      const isIntersecting = this.checkForIntersection(distance, direction);
-
-      const isExactMatch = this.checkIfStopperAtDistance(distance, direction);
-
-      if (isIntersecting && !isExactMatch) {
-        distancesToRemove.push(distance); // collect the distance only if it is intersecting and not an exact match
-      } else if (isExactMatch) {
-        // add all distances that are bigger than the current one
-        distancesToRemove = this.arrayOfDistances.filter((d) => d > distance);
-      }
-
-      if (distancesToRemove.length > 0) {
-        return;
-      }
-    });
-
-    // filter out the collected distances
-    this.arrayOfDistances = this.arrayOfDistances.filter(
-      (distance) => !distancesToRemove.includes(distance)
-    );
-
     if (stopperInDirection) {
       // If a stopper already exists at this distance and it is not linked, just link them
       if (
@@ -374,112 +504,6 @@ export class EcartMapComponent implements OnInit {
       alert('Cannot add stopper. Another stopper exists in between.');
     }
     this.hasChanges = true;
-  }
-
-  checkForIntersection(distance: number, direction: string) {
-    const step = 100; // Fixed step between each stopper
-    let deltaX = 0,
-      deltaY = 0;
-
-    // Calculate the delta based on the direction
-    switch (direction) {
-      case 'N':
-        deltaY = -step;
-        break;
-      case 'S':
-        deltaY = step;
-        break;
-      case 'E':
-        deltaX = step;
-        break;
-      case 'W':
-        deltaX = -step;
-        break;
-    }
-
-    // Check all steps between the selected stopper and target position
-    for (let i = 1; i <= distance; i++) {
-      const checkX = this.selectedStopper.x + deltaX * i;
-      const checkY = this.selectedStopper.y + deltaY * i;
-
-      // Check if there's any stopper at this position
-      if (this.stoppers.find((s) => s.x === checkX && s.y === checkY)) {
-        let foundStopper = this.stoppers.find(
-          (s) => s.x === checkX && s.y === checkY
-        );
-        // HERE'S WHERE A STOPPER IS FOUND
-        return false;
-      }
-
-      // Additional check for nearby stoppers in the perpendicular direction (horizontally or vertically)
-      if (direction === 'N' || direction === 'S') {
-        let lineOfStoppers = this.stoppers.filter((s) => s.y === checkY);
-        if (lineOfStoppers.length > 1) {
-          // take the stoppers that are neighbors and check if the temp node is between them on the X axis
-          for (let i = 0; i < lineOfStoppers.length - 1; i++) {
-            if (
-              this.isStopperLinked(lineOfStoppers[i], lineOfStoppers[i + 1])
-            ) {
-              if (
-                this.selectedStopper.x > lineOfStoppers[i].x &&
-                this.selectedStopper.x < lineOfStoppers[i + 1].x
-              ) {
-                return true;
-              }
-            }
-          }
-        }
-      } else if (direction === 'E' || direction === 'W') {
-        // Check for vertical stoppers along the path
-        let columnOfStoppers = this.stoppers.filter((s) => s.x === checkX);
-        if (columnOfStoppers.length > 1) {
-          // take the stoppers that are neighbors and check if the temp node is between them on the Y axis
-          for (let i = 0; i < columnOfStoppers.length - 1; i++) {
-            if (
-              this.isStopperLinked(columnOfStoppers[i], columnOfStoppers[i + 1])
-            ) {
-              if (
-                this.selectedStopper.y < columnOfStoppers[i].y &&
-                this.selectedStopper.y > columnOfStoppers[i + 1].y
-              ) {
-                return true;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    return false;
-  }
-
-  checkIfStopperAtDistance(distance: number, direction: string): boolean {
-    const currentStopper = this.selectedStopper; // Assuming you are working with a selected stopper
-    let targetPosition = { x: currentStopper.x, y: currentStopper.y };
-    distance *= 100;
-    // Adjust the target position based on the distance and direction
-    switch (direction) {
-      case 'N':
-        targetPosition.y -= distance;
-        break;
-      case 'S':
-        targetPosition.y += distance;
-        break;
-      case 'E':
-        targetPosition.x += distance;
-        break;
-      case 'W':
-        targetPosition.x -= distance;
-        break;
-      default:
-        return false;
-    }
-
-    // Check if there is a stopper at the calculated target position
-    let foundStopper = this.stoppers.some((stopper) => {
-      return stopper.x === targetPosition.x && stopper.y === targetPosition.y;
-    });
-    return foundStopper;
   }
 
   canAddStopperInDirection(direction: string): boolean {
@@ -619,7 +643,6 @@ export class EcartMapComponent implements OnInit {
 
   removeStopper() {
     const stopperId = this.selectedStopper.id;
-
     // Remove references to this stopper from neighbors
     Object.keys(this.selectedStopper.connections).forEach((dir) => {
       const neighborId = this.selectedStopper.connections[dir];
@@ -712,6 +735,7 @@ export class EcartMapComponent implements OnInit {
     this.hasChanges = false;
     this.selectedStopper = null;
     this.contextualMenuVisible = false;
+
     this.isLinking = false;
     this.applyChanges();
   }
@@ -791,9 +815,14 @@ export class EcartMapComponent implements OnInit {
     }
   }
 
-  onDistanceChange(newDistance: number) {
+  onDistanceChange(newDistance: number, init: boolean = false) {
     this.isLinking = false;
     this.newStopper.data.distance = newDistance;
+
+    if (init) {
+      return;
+    }
+
     if (this.directionClicked) {
       this.updateTempStopperPosition(newDistance, this.directionClicked);
 
@@ -837,9 +866,5 @@ export class EcartMapComponent implements OnInit {
 
   deepClone(obj: any) {
     return JSON.parse(JSON.stringify(obj));
-  }
-
-  initializeArrayOfDistances() {
-    return Array.from(Array(this.maxDistance)).map((e, i) => i + 1); // This will create an array from 1 to maxDistance
   }
 }
