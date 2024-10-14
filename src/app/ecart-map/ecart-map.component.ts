@@ -38,6 +38,7 @@ interface PartialStopper {
   styleUrl: './ecart-map.component.css',
 })
 export class EcartMapComponent implements OnInit {
+  // UPDATED TODO: Something similar, maybe just add an alert if the new stopper is over another stopper or something
   // TODO: change label of the contextual menu to say Unlink for already linked distant stoppers
   // also, don't let the users add a new stopper that's after an existing stopper
   // (e.g.if there's a stopper at 1,1 and one at 1,3 don't let the user add a stopper at 1,4 from the 1,1 one)
