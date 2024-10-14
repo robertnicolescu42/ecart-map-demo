@@ -329,11 +329,6 @@ export class EcartMapComponent implements OnInit {
 
     // collect distances to filter out, but allow the distance to remain if it matches an existing stopper's position
     let distancesToRemove: number[] = [];
-
-    console.log(
-      '🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ this.arrayOfDistances:',
-      this.arrayOfDistances
-    );
     this.arrayOfDistances.forEach((distance) => {
       const isIntersecting = this.checkForIntersection(distance, direction);
 
@@ -342,6 +337,9 @@ export class EcartMapComponent implements OnInit {
       if (isIntersecting && !isExactMatch) {
         distancesToRemove.push(distance); // collect the distance only if it is intersecting and not an exact match
       }
+      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ isIntersecting:", isIntersecting)
+      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ isExactMatch:", isExactMatch)
+      console.log("🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ distancesToRemove:", distancesToRemove)
     });
 
     // filter out the collected distances
@@ -414,7 +412,7 @@ export class EcartMapComponent implements OnInit {
           foundStopper
         );
         // HERE'S WHERE A STOPPER IS FOUND
-        return distance;
+        return false;
       }
 
       // Additional check for nearby stoppers in the perpendicular direction (horizontally or vertically)
