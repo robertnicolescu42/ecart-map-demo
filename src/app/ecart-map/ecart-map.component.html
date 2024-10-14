@@ -141,8 +141,8 @@
           font-weight="bold"
           fill="black"
         >
-      {{ stopper.x }}, {{ stopper.y }}
-      </text>
+          {{ stopper.x }}, {{ stopper.y }}
+        </text>
 
         <!-- Render the temporary stopper -->
         <g *ngIf="tempStopper">
@@ -295,20 +295,20 @@
 <ng-template #newStopperInputs>
   <p class="h5 cursor-default mb-3">Add new Stopper</p>
   <div class="form-group">
+    <div class="mb-3" *ngIf="stoppers.length > 0">
+      <label for="newStopperDistanceInput" class="form-label">Distance</label>
+      <select
+        class="form-select"
+        id="newStopperDistanceInput"
+        (change)="onDistanceChange(newStopper.data.distance)"
+        [(ngModel)]="newStopper.data.distance"
+      >
+        <option *ngFor="let distance of arrayOfDistances" [value]="distance">
+          {{ distance }}
+        </option>
+      </select>
+    </div>
     <div *ngIf="!existingStopperAtDistance && !isLinking">
-      <div class="mb-3" *ngIf="stoppers.length > 0">
-        <label for="newStopperDistanceInput" class="form-label">Distance</label>
-        <select
-          class="form-select"
-          id="newStopperDistanceInput"
-          (change)="onDistanceChange(newStopper.data.distance)"
-          [(ngModel)]="newStopper.data.distance"
-        >
-          <option *ngFor="let distance of arrayOfDistances" [value]="distance">
-            {{ distance }}
-          </option>
-        </select>
-      </div>
       <div class="mb-3">
         <label for="newStopperId" class="form-label"
           >Stopper ID <span class="text-danger">*</span>

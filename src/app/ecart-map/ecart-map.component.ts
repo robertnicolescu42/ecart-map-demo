@@ -117,24 +117,7 @@ export class EcartMapComponent implements OnInit {
         N: null,
         S: '3',
         E: null,
-        W: '5',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '5',
-      x: 250,
-      y: 50,
-      connections: {
-        N: null,
-        S: null,
-        E: '4',
-        W: '7',
+        W: null,
       },
       data: {
         eCartId: '',
@@ -150,7 +133,7 @@ export class EcartMapComponent implements OnInit {
       connections: {
         N: null,
         S: '8',
-        E: '5',
+        E: null,
         W: null,
       },
       data: {
@@ -237,6 +220,7 @@ export class EcartMapComponent implements OnInit {
   }
 
   onStopperClick(stopper, event) {
+    this.tempStopper = null;
     this.showNewStopperDialog = false;
     this.selectedStopper = stopper;
     this.contextualMenuVisible = true;
@@ -301,14 +285,9 @@ export class EcartMapComponent implements OnInit {
 
   isStopperLinked(stopper1: Stopper, stopper2: Stopper | undefined): boolean {
     if (!stopper2) return false;
-    Object.keys(stopper1.connections).forEach((connection) => {
-      if (stopper1.connections[connection] === stopper2?.id) {
-        return true;
-      }
-      return false;
-    });
-
-    return true;
+    return Object.keys(stopper1.connections).some(
+      (connection) => stopper1.connections[connection] === stopper2.id
+    );
   }
 
   /**
@@ -348,14 +327,27 @@ export class EcartMapComponent implements OnInit {
       distance
     ).stopper;
 
-    // check if there's a distance at which a connection between two stoppers already exists, and filter it from the array of distances
+    // collect distances to filter out, but allow the distance to remain if it matches an existing stopper's position
+    let distancesToRemove: number[] = [];
+
+    console.log(
+      '🚀 ~ EcartMapComponent ~ this.arrayOfDistances.forEach ~ this.arrayOfDistances:',
+      this.arrayOfDistances
+    );
     this.arrayOfDistances.forEach((distance) => {
-      if (this.checkForIntersection(distance, direction)) {
-        this.arrayOfDistances = this.arrayOfDistances.filter(
-          (d) => d !== distance
-        );
+      const isIntersecting = this.checkForIntersection(distance, direction);
+
+      const isExactMatch = this.checkIfStopperAtDistance(distance, direction);
+
+      if (isIntersecting && !isExactMatch) {
+        distancesToRemove.push(distance); // collect the distance only if it is intersecting and not an exact match
       }
     });
+
+    // filter out the collected distances
+    this.arrayOfDistances = this.arrayOfDistances.filter(
+      (distance) => !distancesToRemove.includes(distance)
+    );
 
     if (stopperInDirection) {
       // If a stopper already exists at this distance and it is not linked, just link them
@@ -410,7 +402,19 @@ export class EcartMapComponent implements OnInit {
 
       // Check if there's any stopper at this position
       if (this.stoppers.find((s) => s.x === checkX && s.y === checkY)) {
-        return true;
+        let foundStopper = this.stoppers.find(
+          (s) => s.x === checkX && s.y === checkY
+        );
+        console.log(
+          '🚀 ~ EcartMapComponent ~ checkForIntersection ~ distance:',
+          distance
+        );
+        console.log(
+          '🚀 ~ EcartMapComponent ~ checkForIntersection ~ foundStopper:',
+          foundStopper
+        );
+        // HERE'S WHERE A STOPPER IS FOUND
+        return distance;
       }
 
       // Additional check for nearby stoppers in the perpendicular direction (horizontally or vertically)
@@ -453,6 +457,35 @@ export class EcartMapComponent implements OnInit {
     }
 
     return false;
+  }
+
+  checkIfStopperAtDistance(distance: number, direction: string): boolean {
+    // Assuming you have access to the stoppers' positions and a way to calculate where the new stopper would be
+    const currentStopper = this.selectedStopper; // Assuming you are working with a selected stopper
+    let targetPosition = { ...currentStopper.position };
+
+    // Adjust the target position based on the distance and direction
+    switch (direction) {
+      case 'N':
+        targetPosition.y -= distance;
+        break;
+      case 'S':
+        targetPosition.y += distance;
+        break;
+      case 'E':
+        targetPosition.x += distance;
+        break;
+      case 'W':
+        targetPosition.x -= distance;
+        break;
+      default:
+        return false;
+    }
+
+    // Check if there is a stopper at the calculated target position
+    return this.stoppers.some((stopper) => {
+      return stopper.x === targetPosition.x && stopper.y === targetPosition.y;
+    });
   }
 
   canAddStopperInDirection(direction: string): boolean {
