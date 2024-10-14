@@ -158,14 +158,21 @@
 
       <!-- Tooltip Template -->
       <ng-template #popTemplate>
-        <div *ngIf="hoveredStopper" class="text-start">
-          <strong>ID:</strong> {{ hoveredStopper.id }}<br />
-          <strong>eCart ID:</strong> {{ hoveredStopper.data.eCartId }}<br />
+        <div *ngIf="hoveredStopper" class="text-start text-wrap">
+          <strong>Stopper ID:</strong> {{ hoveredStopper.id }}<br />
+          <strong>eCart ID:</strong>
+          {{ hoveredStopper.data.eCartId ? hoveredStopper.data.eCartId : "N/A"
+          }}<br />
           <strong *ngIf="hoveredStopper.data.description.length > 0"
             >Description:</strong
           >
           {{ hoveredStopper.data.description }}<br />
-          <strong>Arrival Time:</strong> {{ hoveredStopper.data.arrivalTime }}
+          <strong>Arrival Time:</strong>
+          {{
+            hoveredStopper.data.arrivalTime
+              ? hoveredStopper.data.arrivalTime
+              : "N/A"
+          }}
         </div>
       </ng-template>
 
@@ -175,16 +182,32 @@
         class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
       >
         <div *ngIf="contextualMenuVisible; else noStopperSelected">
-          <div *ngIf="this.selectedStopper && this.selectedStopper.id !== ''">
-            <h5>Stopper: {{ selectedStopper?.id }}</h5>
+          <div
+            *ngIf="this.selectedStopper && this.selectedStopper.id !== ''"
+            class="text-wrap"
+          >
+            <h5>Stopper ID: {{ selectedStopper?.id }}</h5>
             <p>
               <strong>eCart ID:</strong>
-              {{ selectedStopper?.data.eCartId }}<br />
-              <strong *ngIf="selectedStopper?.data.description"
-                >Description:</strong
-              >
-              {{ selectedStopper?.data.description }}<br />
             </p>
+
+            <div class="text-wrap">
+              {{
+                selectedStopper?.data.eCartId
+                  ? selectedStopper?.data.eCartId
+                  : "N/A"
+              }}
+            </div>
+            <br />
+            <strong>Description:</strong>
+            <div class="text-wrap">
+              {{
+                selectedStopper?.data.description
+                  ? selectedStopper?.data.description
+                  : "N/A"
+              }}
+            </div>
+            <br />
 
             <hr />
           </div>
@@ -271,6 +294,7 @@
           id="newStopperId"
           placeholder="Enter Stopper ID"
           [(ngModel)]="newStopper.id"
+          maxLength="100"
         />
       </div>
       <div class="mb-3">
