@@ -42,18 +42,6 @@
         <i class="fas fa-edit"></i> Switch to Edit Mode
       </button>
 
-      <div class="ms-auto">
-        <!-- Zoom In button -->
-        <button class="btn btn-secondary me-2" (click)="zoomIn()">
-          <i class="fas fa-search-plus"></i> Zoom In
-        </button>
-
-        <!-- Zoom Out button -->
-        <button class="btn btn-secondary" (click)="zoomOut()">
-          <i class="fas fa-search-minus"></i> Zoom Out
-        </button>
-      </div>
-
       <!-- Save / Cancel buttons when in edit mode -->
       <div *ngIf="isEditMode">
         <button
@@ -76,8 +64,8 @@
       <svg
         [attr.width]="svgDimensions.width"
         [attr.height]="svgDimensions.height"
-        [attr.viewBox]="svgViewBox"
         class="svg-map"
+        #svgMap
       >
         <!-- Grid pattern -->
         <defs *ngIf="isEditMode">
@@ -152,7 +140,8 @@
           font-weight="bold"
           fill="black"
         >
-          {{ stopper.x }}, {{ stopper.y }}
+          <!-- {{ stopper.x }}, {{ stopper.y }} -->
+          {{ stopper.id }}
         </text>
 
         <!-- Render the temporary stopper -->

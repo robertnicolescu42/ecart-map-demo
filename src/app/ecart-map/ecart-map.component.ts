@@ -1,7 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FormsModule } from '@angular/forms';
+import svgPanZoom from 'svg-pan-zoom';
 
 interface Stopper {
   id: string;
@@ -37,7 +46,7 @@ interface PartialStopper {
   templateUrl: './ecart-map.component.html',
   styleUrl: './ecart-map.component.css',
 })
-export class EcartMapComponent implements OnInit {
+export class EcartMapComponent implements OnInit, AfterViewInit {
   // UPDATED TODO: Something similar, maybe just add an alert if the new stopper is over another stopper or something
   // TODO: change label of the contextual menu to say Unlink for already linked distant stoppers
   // also, don't let the users add a new stopper that's after an existing stopper
@@ -414,8 +423,8 @@ export class EcartMapComponent implements OnInit {
     (e, i) => i + 1
   ); // This will create an array from 1 to maxDistance
   isLinking: boolean = false;
-  zoomLevel: number = 1;
-  svgViewBox: string = '0 0 1000 1000';
+  @ViewChild('svgMap', { static: false }) svgMap!: ElementRef<SVGElement>;
+  panZoomInstance: any;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -444,29 +453,42 @@ export class EcartMapComponent implements OnInit {
       this.tempStopper = this.selectedStopper;
     }
     this.updateSvgDimensions();
-    this.svgViewBox =
-      '0 0 ' + this.svgDimensions.width + ' ' + this.svgDimensions.height;
   }
 
-  zoomIn() {
-    this.zoomLevel += 0.5; // Increase zoom level by 10%
-    this.updateViewBox();
-  }
-
-  zoomOut() {
-    if (this.zoomLevel > 0.2) {
-      // Set a minimum zoom level
-      this.zoomLevel -= 0.1; // Decrease zoom level by 10%
-      this.updateViewBox();
+  ngAfterViewInit(): void {
+    if (this.svgMap) {
+      this.initializePanZoom();
     }
   }
 
-  updateViewBox() {
-    const width = 1000 / this.zoomLevel; // Adjust width according to zoom level
-    const height = 1000 / this.zoomLevel; // Adjust height according to zoom level
-    const x = (1000 - width) / 2; // Keep centered while zooming
-    const y = (1000 - height) / 2;
-    this.svgViewBox = `${x} ${y} ${width} ${height}`;
+  initializePanZoom(): void {
+    this.panZoomInstance = svgPanZoom(this.svgMap.nativeElement, {
+      zoomEnabled: true,
+      controlIconsEnabled: true,
+      fit: true,
+      center: true,
+      minZoom: 0.1,
+      maxZoom: 10,
+      panEnabled: true,
+    });
+  }
+
+  resetZoom(): void {
+    if (this.panZoomInstance) {
+      this.panZoomInstance.resetZoom();
+    }
+  }
+
+  zoomIn(): void {
+    if (this.panZoomInstance) {
+      this.panZoomInstance.zoomIn();
+    }
+  }
+
+  zoomOut(): void {
+    if (this.panZoomInstance) {
+      this.panZoomInstance.zoomOut();
+    }
   }
 
   getStopperById(id: string) {
