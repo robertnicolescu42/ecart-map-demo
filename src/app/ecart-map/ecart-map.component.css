@@ -9,6 +9,14 @@
 .svg-map {
   border-radius: 10px;
   border: 2px solid #000;
+  display: block;
+}
+
+.svg-wrapper {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  position: relative;
 }
 
 .map-title {
