@@ -60,13 +60,13 @@
         </button>
       </div>
     </div>
-    <div class="p-2 position-relative svg-wrapper" *ngIf="stoppers">
+    <div class="p-2 position-relative svg-wrapper svg-map" *ngIf="stoppers">
       <svg
         [attr.width]="svgDimensions.width"
         [attr.height]="svgDimensions.height"
-        class="svg-map"
         #svgMap
       >
+        <!-- class="svg-map" -->
         <!-- Grid pattern -->
         <defs *ngIf="isEditMode">
           <pattern
@@ -140,8 +140,7 @@
           font-weight="bold"
           fill="black"
         >
-          <!-- {{ stopper.x }}, {{ stopper.y }} -->
-          {{ stopper.id }}
+          {{ isEditMode ? stopper.id : "" }}
         </text>
 
         <!-- Render the temporary stopper -->

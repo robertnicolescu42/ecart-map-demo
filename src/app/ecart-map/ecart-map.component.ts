@@ -64,351 +64,351 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
   newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
-  // stoppers = [];
+  stoppers = [];
 
-  stoppers = [
-    {
-      id: '1',
-      x: 50,
-      y: 650,
-      connections: {
-        N: null,
-        S: null,
-        E: '2',
-        W: null,
-        undefined: '',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '2',
-      x: 150,
-      y: 650,
-      connections: {
-        N: null,
-        S: '5',
-        E: '3',
-        W: '1',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '3',
-      x: 250,
-      y: 650,
-      connections: {
-        N: null,
-        S: '6',
-        E: '4',
-        W: '2',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '4',
-      x: 350,
-      y: 650,
-      connections: {
-        N: null,
-        S: null,
-        E: null,
-        W: '3',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '5',
-      x: 150,
-      y: 750,
-      connections: {
-        N: '2',
-        S: null,
-        E: '6',
-        W: '7',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '6',
-      x: 250,
-      y: 750,
-      connections: {
-        N: '3',
-        S: null,
-        E: '8',
-        W: '5',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '7',
-      x: 50,
-      y: 750,
-      connections: {
-        N: null,
-        S: null,
-        E: '5',
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '8',
-      x: 350,
-      y: 750,
-      connections: {
-        N: null,
-        S: null,
-        E: '9',
-        W: '6',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '9',
-      x: 550,
-      y: 750,
-      connections: {
-        N: '10',
-        S: null,
-        E: '15',
-        W: '8',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '10',
-      x: 550,
-      y: 650,
-      connections: {
-        N: '11',
-        S: '9',
-        E: '12',
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '11',
-      x: 550,
-      y: 550,
-      connections: {
-        N: 'n7',
-        S: '10',
-        E: null,
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '12',
-      x: 650,
-      y: 650,
-      connections: {
-        N: null,
-        S: '15',
-        E: '13',
-        W: '10',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '13',
-      x: 1050,
-      y: 650,
-      connections: {
-        N: null,
-        S: null,
-        E: 'n1',
-        W: '12',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '15',
-      x: 650,
-      y: 750,
-      connections: {
-        N: '12',
-        S: '16',
-        E: null,
-        W: '9',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: '16',
-      x: 650,
-      y: 850,
-      connections: {
-        N: '15',
-        S: 'n5',
-        E: null,
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'n1',
-      x: 1550,
-      y: 650,
-      connections: {
-        N: null,
-        S: null,
-        E: 'n2',
-        W: '13',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'n2',
-      x: 2050,
-      y: 650,
-      connections: {
-        N: null,
-        S: null,
-        E: null,
-        W: 'n1',
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'n5',
-      x: 650,
-      y: 1350,
-      connections: {
-        N: '16',
-        S: 'n6',
-        E: null,
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'n6',
-      x: 650,
-      y: 1850,
-      connections: {
-        N: 'n5',
-        S: null,
-        E: null,
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-    {
-      id: 'n7',
-      x: 550,
-      y: 50,
-      connections: {
-        N: null,
-        S: '11',
-        E: null,
-        W: null,
-      },
-      data: {
-        eCartId: '',
-        description: '',
-        arrivalTime: null,
-        isEcartAvailable: false,
-      },
-    },
-  ];
+  // stoppers = [
+  //   {
+  //     id: '1',
+  //     x: 50,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: '2',
+  //       W: null,
+  //       undefined: '',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '2',
+  //     x: 150,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: '5',
+  //       E: '3',
+  //       W: '1',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '3',
+  //     x: 250,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: '6',
+  //       E: '4',
+  //       W: '2',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '4',
+  //     x: 350,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: null,
+  //       W: '3',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '5',
+  //     x: 150,
+  //     y: 750,
+  //     connections: {
+  //       N: '2',
+  //       S: null,
+  //       E: '6',
+  //       W: '7',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '6',
+  //     x: 250,
+  //     y: 750,
+  //     connections: {
+  //       N: '3',
+  //       S: null,
+  //       E: '8',
+  //       W: '5',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '7',
+  //     x: 50,
+  //     y: 750,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: '5',
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '8',
+  //     x: 350,
+  //     y: 750,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: '9',
+  //       W: '6',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '9',
+  //     x: 550,
+  //     y: 750,
+  //     connections: {
+  //       N: '10',
+  //       S: null,
+  //       E: '15',
+  //       W: '8',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '10',
+  //     x: 550,
+  //     y: 650,
+  //     connections: {
+  //       N: '11',
+  //       S: '9',
+  //       E: '12',
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '11',
+  //     x: 550,
+  //     y: 550,
+  //     connections: {
+  //       N: 'n7',
+  //       S: '10',
+  //       E: null,
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '12',
+  //     x: 650,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: '15',
+  //       E: '13',
+  //       W: '10',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '13',
+  //     x: 1050,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: 'n1',
+  //       W: '12',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '15',
+  //     x: 650,
+  //     y: 750,
+  //     connections: {
+  //       N: '12',
+  //       S: '16',
+  //       E: null,
+  //       W: '9',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: '16',
+  //     x: 650,
+  //     y: 850,
+  //     connections: {
+  //       N: '15',
+  //       S: 'n5',
+  //       E: null,
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'n1',
+  //     x: 1550,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: 'n2',
+  //       W: '13',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'n2',
+  //     x: 2050,
+  //     y: 650,
+  //     connections: {
+  //       N: null,
+  //       S: null,
+  //       E: null,
+  //       W: 'n1',
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'n5',
+  //     x: 650,
+  //     y: 1350,
+  //     connections: {
+  //       N: '16',
+  //       S: 'n6',
+  //       E: null,
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'n6',
+  //     x: 650,
+  //     y: 1850,
+  //     connections: {
+  //       N: 'n5',
+  //       S: null,
+  //       E: null,
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  //   {
+  //     id: 'n7',
+  //     x: 550,
+  //     y: 50,
+  //     connections: {
+  //       N: null,
+  //       S: '11',
+  //       E: null,
+  //       W: null,
+  //     },
+  //     data: {
+  //       eCartId: '',
+  //       description: '',
+  //       arrivalTime: null,
+  //       isEcartAvailable: false,
+  //     },
+  //   },
+  // ];
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -464,13 +464,17 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
   initializePanZoom(): void {
     this.panZoomInstance = svgPanZoom(this.svgMap.nativeElement, {
       zoomEnabled: true,
-      controlIconsEnabled: true,
+      controlIconsEnabled: false,
       fit: true,
       center: true,
       minZoom: 0.1,
       maxZoom: 10,
       panEnabled: true,
+      dblClickZoomEnabled: true,
     });
+
+    // Set the zoom to fit all stoppers
+    // this.fitZoomToAllStoppers();
   }
 
   resetZoom(): void {
@@ -488,6 +492,37 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
   zoomOut(): void {
     if (this.panZoomInstance) {
       this.panZoomInstance.zoomOut();
+    }
+  }
+
+  fitZoomToAllStoppers() {
+    if (this.stoppers.length > 0) {
+      const minX = Math.min(...this.stoppers.map((stopper) => stopper.x));
+      const minY = Math.min(...this.stoppers.map((stopper) => stopper.y));
+      const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
+      const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
+
+      // Calculate width and height of the bounding box
+      const width = maxX - minX + this.padding * 2; // Add padding
+      const height = maxY - minY + this.padding * 2; // Add padding
+      console.log(
+        '🚀 ~ EcartMapComponent ~ fitZoomToAllStoppers ~ width:',
+        width
+      );
+      console.log(
+        '🚀 ~ EcartMapComponent ~ fitZoomToAllStoppers ~ height:',
+        height
+      );
+
+      // Update SVG dimensions
+      // this.svgDimensions.width = Math.max(width, 300); // Ensure minimum width
+      // this.svgDimensions.height = Math.max(height, 100); // Ensure minimum height
+
+      // Fit zoom to the bounding box
+      this.panZoomInstance.fit();
+      this.panZoomInstance.center();
+    } else {
+      this.panZoomInstance.resetZoom(); // Reset zoom if there are no stoppers
     }
   }
 
@@ -870,6 +905,7 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
     this.contextualMenuVisible = false;
 
     this.isLinking = false;
+    this.panZoomInstance.resetZoom();
     this.applyChanges();
   }
 
