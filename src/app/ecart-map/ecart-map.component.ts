@@ -409,6 +409,7 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
   //     },
   //   },
   // ];
+
   directionClicked: string | null = null;
   hoveredStopper = null;
   svgDimensions = { width: 0, height: 0 };
@@ -483,46 +484,41 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  zoomIn(): void {
+  fitZoomToAllStoppers(): void {
+    // First, calculate the extremities based on the current stoppers
+    const { minX, minY, maxX, maxY, center } = this.calculateExtremities();
+    // Calculate content dimensions
+    const contentWidth = maxX - minX;
+    const contentHeight = maxY - minY;
+
+    // Get SVG dimensions
+    const svgWidth = this.svgDimensions.width;
+    const svgHeight = this.svgDimensions.height;
+
+    // Calculate scale
+    const scaleX = svgWidth / contentWidth;
+    const scaleY = svgHeight / contentHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    // Calculate translations to center the content
+    const translateX = (svgWidth - contentWidth * scale) / 2 - minX * scale;
+    const translateY = (svgHeight - contentHeight * scale) / 2 - minY * scale;
+
+    // Apply transformations
     if (this.panZoomInstance) {
-      this.panZoomInstance.zoomIn();
-    }
-  }
-
-  zoomOut(): void {
-    if (this.panZoomInstance) {
-      this.panZoomInstance.zoomOut();
-    }
-  }
-
-  fitZoomToAllStoppers() {
-    if (this.stoppers.length > 0) {
-      const minX = Math.min(...this.stoppers.map((stopper) => stopper.x));
-      const minY = Math.min(...this.stoppers.map((stopper) => stopper.y));
-      const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
-      const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
-
-      // Calculate width and height of the bounding box
-      const width = maxX - minX + this.padding * 2; // Add padding
-      const height = maxY - minY + this.padding * 2; // Add padding
+      this.panZoomInstance.resetZoom(); // Reset to default zoom if needed
+      // this.panZoomInstance.setTransform(translateX, translateY, scale);
       console.log(
-        '🚀 ~ EcartMapComponent ~ fitZoomToAllStoppers ~ width:',
-        width
+        '🚀 ~ EcartMapComponent ~ fitZoomToAllStoppers ~ scale:',
+        scale
       );
-      console.log(
-        '🚀 ~ EcartMapComponent ~ fitZoomToAllStoppers ~ height:',
-        height
-      );
-
-      // Update SVG dimensions
-      // this.svgDimensions.width = Math.max(width, 300); // Ensure minimum width
-      // this.svgDimensions.height = Math.max(height, 100); // Ensure minimum height
-
-      // Fit zoom to the bounding box
-      this.panZoomInstance.fit();
-      this.panZoomInstance.center();
-    } else {
-      this.panZoomInstance.resetZoom(); // Reset zoom if there are no stoppers
+      // this.panZoomInstance.zoom(scale / 3);
+      // this.panZoomInstance.panBy({ x: center.x, y: center.y });
+      this.panZoomInstance.zoomAtPoint(0.8, {
+        x: center.x * 5,
+        y: center.y * 5,
+      });
+      // this.panZoomInstance.center();
     }
   }
 
@@ -783,9 +779,11 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
           break;
       }
 
-      newStopper.connections[oppositeDirection[direction]] =
-        this.selectedStopper.id;
-      this.selectedStopper.connections[direction] = newNeighborId;
+      if (direction) {
+        newStopper.connections[oppositeDirection[direction]] =
+          this.selectedStopper.id;
+        this.selectedStopper.connections[direction] = newNeighborId;
+      }
       this.stoppers.push(newStopper);
       this.selectedStopper = newStopper;
     } else {
@@ -832,6 +830,7 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
 
   editStopper() {
     // placeholder
+    console.log(this.stoppers);
     this.closeMenu();
   }
 
@@ -1036,5 +1035,23 @@ export class EcartMapComponent implements OnInit, AfterViewInit {
 
   deepClone(obj: any) {
     return JSON.parse(JSON.stringify(obj));
+  }
+
+  calculateExtremities() {
+    const minX = Math.min(...this.stoppers.map((stopper) => stopper.x));
+    const minY = Math.min(...this.stoppers.map((stopper) => stopper.y));
+    const maxX = Math.max(...this.stoppers.map((stopper) => stopper.x));
+    const maxY = Math.max(...this.stoppers.map((stopper) => stopper.y));
+    const center = {
+      x: (minX + maxX) / 2,
+      y: (minY + maxY) / 2,
+    };
+    return {
+      minX,
+      minY,
+      maxX,
+      maxY,
+      center,
+    };
   }
 }
