@@ -1,7 +1,6 @@
-<div
-  class="container d-flex justify-content-center align-items-center min-vh-100"
->
-  <div class="text-center map-container border rounded p-3">
+<div class="container-fluid d-flex min-vh-100 p-3">
+  <!-- Map Container -->
+  <div class="text-center map-container col-10 border rounded p-3">
     <p class="h3 p-2 map-title text-black">eCart map example</p>
     <hr />
     <!-- Legend Section -->
@@ -84,7 +83,7 @@
           </pattern>
         </defs>
 
-        <!-- background rectangle for the grid pattern -->
+        <!-- Background rectangle for the grid pattern -->
         <rect width="100%" height="100%" fill="url(#grid)"></rect>
 
         <!-- Draw lines between stoppers (connections) -->
@@ -110,7 +109,6 @@
         </ng-container>
 
         <!-- Draw stoppers (circles) -->
-        <!-- [attr.fill]="stopper.color" -->
         <circle
           *ngFor="let stopper of stoppers"
           [attr.cx]="stopper.x"
@@ -187,100 +185,78 @@
           }}
         </div>
       </ng-template>
+    </div>
+  </div>
 
-      <!-- Contextual Menu -->
+  <!-- Menu -->
+  <div class="contextual-menu col-2 bg-light p-3 border rounded shadow">
+    <div *ngIf="contextualMenuVisible; else noStopperSelected">
       <div
-        *ngIf="isEditMode"
-        class="contextual-menu bg-light p-3 border rounded shadow contextual-menu"
+        *ngIf="this.selectedStopper && this.selectedStopper.id !== ''"
+        class="text-wrap"
       >
-        <div *ngIf="contextualMenuVisible; else noStopperSelected">
-          <div
-            *ngIf="this.selectedStopper && this.selectedStopper.id !== ''"
-            class="text-wrap"
-          >
-            <h5>Stopper ID: {{ selectedStopper?.id }}</h5>
-            <p>
-              <strong>eCart ID:</strong>
-            </p>
-
-            <div class="text-wrap">
-              {{
-                selectedStopper?.data.eCartId
-                  ? selectedStopper?.data.eCartId
-                  : "N/A"
-              }}
-            </div>
-            <br />
-            <strong>Description:</strong>
-            <div class="text-wrap">
-              {{
-                selectedStopper?.data.description
-                  ? selectedStopper?.data.description
-                  : "N/A"
-              }}
-            </div>
-            <br />
-
-            <hr />
-          </div>
-          <div *ngIf="!showNewStopperDialog; else newStopperInputs">
-            <div class="dropdown-divider"></div>
-            <div class="position-relative text-center neighbor-buttons">
-              <button
-                class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
-                (click)="addRemoveNeighbor('N')"
-              >
-                <i class="fas fa-arrow-up"></i>
-                {{ addRemoveNeighborLabel("N") }}
-              </button>
-              <button
-                class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
-                (click)="addRemoveNeighbor('W')"
-              >
-                <i class="fas fa-arrow-left"></i>
-                {{ addRemoveNeighborLabel("W") }}
-              </button>
-              <button
-                class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
-                (click)="addRemoveNeighbor('E')"
-              >
-                {{ addRemoveNeighborLabel("E") }}
-                <i class="fas fa-arrow-right"></i>
-              </button>
-              <button
-                class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
-                (click)="addRemoveNeighbor('S')"
-              >
-                <i class="fas fa-arrow-down"></i>
-                {{ addRemoveNeighborLabel("S") }}
-              </button>
-            </div>
-
-            <div class="dropdown-divider"></div>
-            <hr />
-
-            <button
-              class="btn btn-sm btn-primary my-2 w-100"
-              (click)="editStopper()"
-            >
-              <i class="fas fa-edit"></i>
-              Edit Stopper
-            </button>
-            <button
-              *ngIf="this.stoppers.length > 1"
-              class="btn btn-sm btn-danger w-100 my-2"
-              (click)="removeStopper()"
-            >
-              <i class="fas fa-trash px-1"></i>Remove Stopper
-            </button>
-            <button
-              class="btn btn-sm btn-secondary w-100 my-2"
-              (click)="closeMenu()"
-            >
-              <i class="fas fa-close"></i> Close
-            </button>
-          </div>
+        <h5>Stopper ID: {{ selectedStopper?.id }}</h5>
+        <p><strong>eCart ID:</strong></p>
+        <div class="text-wrap">
+          {{
+            selectedStopper?.data.eCartId
+              ? selectedStopper?.data.eCartId
+              : "N/A"
+          }}
         </div>
+        <br />
+        <strong>Description:</strong>
+        <div class="text-wrap">
+          {{
+            selectedStopper?.data.description
+              ? selectedStopper?.data.description
+              : "N/A"
+          }}
+        </div>
+        <br />
+        <hr />
+      </div>
+
+      <div *ngIf="!showNewStopperDialog; else newStopperInputs">
+        <div class="dropdown-divider"></div>
+        <div class="position-relative text-center neighbor-buttons">
+          <button
+            class="btn btn-secondary btn-sm position-absolute top-0 start-50 translate-middle-x"
+            (click)="addRemoveNeighbor('N')"
+          >
+            <i class="fas fa-arrow-up"></i> {{ addRemoveNeighborLabel("N") }}
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute start-0 top-50 translate-middle-y"
+            (click)="addRemoveNeighbor('W')"
+          >
+            <i class="fas fa-arrow-left"></i> {{ addRemoveNeighborLabel("W") }}
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute top-50 end-0 translate-middle-y"
+            (click)="addRemoveNeighbor('E')"
+          >
+            {{ addRemoveNeighborLabel("E") }} <i class="fas fa-arrow-right"></i>
+          </button>
+          <button
+            class="btn btn-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x"
+            (click)="addRemoveNeighbor('S')"
+          >
+            <i class="fas fa-arrow-down"></i> {{ addRemoveNeighborLabel("S") }}
+          </button>
+        </div>
+
+        <div class="dropdown-divider"></div>
+        <hr />
+        <button
+          class="btn btn-sm btn-primary my-2 w-100"
+          (click)="editStopper()"
+        >
+          <i class="fas fa-edit"></i> Edit Stopper
+        </button>
+        <button class="btn btn-sm btn-danger w-100" (click)="removeStopper()">
+          <i class="fas fa-trash-alt"></i> Remove Stopper
+        </button>
       </div>
     </div>
   </div>
@@ -293,68 +269,70 @@
 </ng-template>
 
 <ng-template #newStopperInputs>
-  <p class="h5 cursor-default mb-3">Add new Stopper</p>
-  <div class="form-group">
-    <div class="mb-3" *ngIf="stoppers.length > 0">
-      <label for="newStopperDistanceInput" class="form-label">Distance</label>
-      <select
-        class="form-select"
-        id="newStopperDistanceInput"
-        (change)="onDistanceChange(newStopper.data.distance)"
-        [(ngModel)]="newStopper.data.distance"
-      >
-        <option *ngFor="let distance of arrayOfDistances" [value]="distance">
-          {{ distance }}
-        </option>
-      </select>
-    </div>
-    <div *ngIf="!isLinking">
-      <div class="mb-3">
-        <label for="newStopperId" class="form-label"
-          >Stopper ID <span class="text-danger">*</span>
-        </label>
-        <input
-          type="text"
-          class="form-control"
-          id="newStopperId"
-          placeholder="Enter Stopper ID"
-          [(ngModel)]="newStopper.id"
-          maxLength="100"
-        />
-      </div>
-      <div class="mb-3">
-        <label for="newStopperDescription" class="form-label"
-          >Description</label
+  <div>
+    <p class="h5 cursor-default mb-3">Add new Stopper</p>
+    <div class="form-group">
+      <div class="mb-3" *ngIf="stoppers.length > 0">
+        <label for="newStopperDistanceInput" class="form-label">Distance</label>
+        <select
+          class="form-select"
+          id="newStopperDistanceInput"
+          (change)="onDistanceChange(newStopper.data.distance)"
+          [(ngModel)]="newStopper.data.distance"
         >
-        <input
-          type="text"
-          class="form-control"
-          id="newStopperDescription"
-          placeholder="Enter description"
-          [(ngModel)]="newStopper.data.description"
-        />
+          <option *ngFor="let distance of arrayOfDistances" [value]="distance">
+            {{ distance }}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="!isLinking">
+        <div class="mb-3">
+          <label for="newStopperId" class="form-label"
+            >Stopper ID <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="newStopperId"
+            placeholder="Enter Stopper ID"
+            [(ngModel)]="newStopper.id"
+            maxLength="100"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="newStopperDescription" class="form-label"
+            >Description</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="newStopperDescription"
+            placeholder="Enter description"
+            [(ngModel)]="newStopper.data.description"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="d-flex justify-content-between pt-2">
-    <button
-      *ngIf="this.stoppers.length > 0"
-      class="btn btn-secondary"
-      (click)="cancelAddingOfNewStopper()"
-    >
-      <i class="fas fa-times"></i> Cancel
-    </button>
-    <button
-      class="btn btn-primary"
-      (click)="saveNewStopper()"
-      [disabled]="
-        (newStopper.id === '' ||
-          newStopper.data.distance < 1 ||
-          newStopper.data.distance > 10) &&
-        !isLinking
-      "
-    >
-      <i class="fas fa-check"></i> {{ !isLinking ? "Save" : "Link" }}
-    </button>
+    <div class="d-flex justify-content-between pt-2">
+      <button
+        *ngIf="this.stoppers.length > 0"
+        class="btn btn-secondary"
+        (click)="cancelAddingOfNewStopper()"
+      >
+        <i class="fas fa-times"></i> Cancel
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="saveNewStopper()"
+        [disabled]="
+          (newStopper.id === '' ||
+            newStopper.data.distance < 1 ||
+            newStopper.data.distance > 10) &&
+          !isLinking
+        "
+      >
+        <i class="fas fa-check"></i> {{ !isLinking ? "Save" : "Link" }}
+      </button>
+    </div>
   </div>
 </ng-template>

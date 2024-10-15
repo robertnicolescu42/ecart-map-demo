@@ -16,13 +16,9 @@
 }
 
 .contextual-menu {
-  position: fixed;
-  top: 100px;
-  right: 20px;
-  width: 250px;
-  z-index: 1000;
+  width: 100%;
+  height: auto;
 }
-
 .neighbor-buttons {
   height: 150px;
   width: 220px;
@@ -32,6 +28,14 @@
 
 .neighbor-buttons button {
   width: 105px;
+}
+
+.menu-container {
+  background-color: #fff;
+  height: 100%;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: 12px 12px 2px 1px rgba(255, 255, 255, 0.2);
 }
 
 .contextual-menu {

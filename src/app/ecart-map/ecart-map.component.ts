@@ -52,15 +52,16 @@ export class EcartMapComponent implements OnInit {
       distance: 1,
     },
   };
-  // Deep copy of emptyStopper to avoid reference issues
   newStopper: PartialStopper = this.deepClone(this.emptyStopper);
   padding = 50;
   originalStoppers = [];
+  // stoppers = [];
+
   stoppers = [
     {
       id: '1',
       x: 50,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: null,
@@ -78,7 +79,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '2',
       x: 150,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: '5',
@@ -95,7 +96,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '3',
       x: 250,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: '6',
@@ -112,7 +113,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '4',
       x: 350,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: null,
@@ -129,7 +130,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '5',
       x: 150,
-      y: 250,
+      y: 750,
       connections: {
         N: '2',
         S: null,
@@ -146,7 +147,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '6',
       x: 250,
-      y: 250,
+      y: 750,
       connections: {
         N: '3',
         S: null,
@@ -163,7 +164,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '7',
       x: 50,
-      y: 250,
+      y: 750,
       connections: {
         N: null,
         S: null,
@@ -180,7 +181,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '8',
       x: 350,
-      y: 250,
+      y: 750,
       connections: {
         N: null,
         S: null,
@@ -197,7 +198,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '9',
       x: 550,
-      y: 250,
+      y: 750,
       connections: {
         N: '10',
         S: null,
@@ -214,7 +215,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '10',
       x: 550,
-      y: 150,
+      y: 650,
       connections: {
         N: '11',
         S: '9',
@@ -231,9 +232,9 @@ export class EcartMapComponent implements OnInit {
     {
       id: '11',
       x: 550,
-      y: 50,
+      y: 550,
       connections: {
-        N: null,
+        N: 'n7',
         S: '10',
         E: null,
         W: null,
@@ -248,7 +249,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '12',
       x: 650,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: '15',
@@ -265,11 +266,11 @@ export class EcartMapComponent implements OnInit {
     {
       id: '13',
       x: 1050,
-      y: 150,
+      y: 650,
       connections: {
         N: null,
         S: null,
-        E: null,
+        E: 'n1',
         W: '12',
       },
       data: {
@@ -282,7 +283,7 @@ export class EcartMapComponent implements OnInit {
     {
       id: '15',
       x: 650,
-      y: 250,
+      y: 750,
       connections: {
         N: '12',
         S: '16',
@@ -299,10 +300,95 @@ export class EcartMapComponent implements OnInit {
     {
       id: '16',
       x: 650,
-      y: 350,
+      y: 850,
       connections: {
         N: '15',
+        S: 'n5',
+        E: null,
+        W: null,
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'n1',
+      x: 1550,
+      y: 650,
+      connections: {
+        N: null,
         S: null,
+        E: 'n2',
+        W: '13',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'n2',
+      x: 2050,
+      y: 650,
+      connections: {
+        N: null,
+        S: null,
+        E: null,
+        W: 'n1',
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'n5',
+      x: 650,
+      y: 1350,
+      connections: {
+        N: '16',
+        S: 'n6',
+        E: null,
+        W: null,
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'n6',
+      x: 650,
+      y: 1850,
+      connections: {
+        N: 'n5',
+        S: null,
+        E: null,
+        W: null,
+      },
+      data: {
+        eCartId: '',
+        description: '',
+        arrivalTime: null,
+        isEcartAvailable: false,
+      },
+    },
+    {
+      id: 'n7',
+      x: 550,
+      y: 50,
+      connections: {
+        N: null,
+        S: '11',
         E: null,
         W: null,
       },
@@ -497,7 +583,7 @@ export class EcartMapComponent implements OnInit {
         stopperInDirection.connections[oppositeDirection[direction]] = null;
       }
     } else if (this.canAddStopperInDirection(direction)) {
-      // No stopper exists, show dialog to add new stopper
+      // No stopper exists
       this.showNewStopperDialog = true;
       this.directionClicked = direction;
       this.updateTempStopperPosition(distance, direction);
@@ -715,7 +801,7 @@ export class EcartMapComponent implements OnInit {
 
   enterEditMode() {
     this.isEditMode = true;
-    this.originalStoppers = this.deepClone(this.stoppers); // Deep copy of stoppers
+    this.originalStoppers = this.deepClone(this.stoppers);
     this.hasChanges = false;
   }
 
@@ -725,12 +811,11 @@ export class EcartMapComponent implements OnInit {
     this.tempStopper = null;
     this.selectedStopper = null;
     this.showNewStopperDialog = false;
-    this.stoppers = this.deepClone(this.originalStoppers); // Revert to original state
+    this.stoppers = this.deepClone(this.originalStoppers); // Revert to the original state
     this.hasChanges = false;
     this.updateSvgDimensions();
   }
 
-  // Save edit mode changes
   saveEdit() {
     this.isEditMode = false;
     this.hasChanges = false;
@@ -820,6 +905,7 @@ export class EcartMapComponent implements OnInit {
     this.isLinking = false;
     this.newStopper.data.distance = newDistance;
 
+    // This resets the distance every time the user clicks to add a new stopper
     if (init) {
       return;
     }
@@ -827,7 +913,7 @@ export class EcartMapComponent implements OnInit {
     if (this.directionClicked) {
       this.updateTempStopperPosition(newDistance, this.directionClicked);
 
-      // check if the new stopper overlaps an existing one at this distance and direction,
+      // Check if the new stopper overlaps an existing one at this distance and direction,
       // and if it does, just link it to that one
       const stopperInDirection = this.getStopperByPosition(
         this.selectedStopper,
