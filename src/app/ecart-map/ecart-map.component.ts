@@ -414,6 +414,8 @@ export class EcartMapComponent implements OnInit {
     (e, i) => i + 1
   ); // This will create an array from 1 to maxDistance
   isLinking: boolean = false;
+  zoomLevel: number = 1;
+  svgViewBox: string = '0 0 1000 1000';
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -442,6 +444,29 @@ export class EcartMapComponent implements OnInit {
       this.tempStopper = this.selectedStopper;
     }
     this.updateSvgDimensions();
+    this.svgViewBox =
+      '0 0 ' + this.svgDimensions.width + ' ' + this.svgDimensions.height;
+  }
+
+  zoomIn() {
+    this.zoomLevel += 0.5; // Increase zoom level by 10%
+    this.updateViewBox();
+  }
+
+  zoomOut() {
+    if (this.zoomLevel > 0.2) {
+      // Set a minimum zoom level
+      this.zoomLevel -= 0.1; // Decrease zoom level by 10%
+      this.updateViewBox();
+    }
+  }
+
+  updateViewBox() {
+    const width = 1000 / this.zoomLevel; // Adjust width according to zoom level
+    const height = 1000 / this.zoomLevel; // Adjust height according to zoom level
+    const x = (1000 - width) / 2; // Keep centered while zooming
+    const y = (1000 - height) / 2;
+    this.svgViewBox = `${x} ${y} ${width} ${height}`;
   }
 
   getStopperById(id: string) {
